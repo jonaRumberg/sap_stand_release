@@ -9,6 +9,7 @@ Ein SAP-Ständtastisches Projekt!
 - [Verfügbare Module](#Verfügbare_Module)
 - [Installation der Node Modules](#Installation_der_Node_Modules)
 - [SAP-Ständ Software starten](#SAP_Ständ_Software_starten)
+- [Deploy](#Deploy)
 - [Code Doku](#Code_Doku)
 - [Kontakte und Verantwortliche](#Kontakte_und_Verantwortliche)
 
@@ -38,6 +39,9 @@ npm i express firmata firmata-io johnny-five
 ## SAP_Ständ_Software_starten
 
 package.json scripts
+
+## Deploy
+Wenn der code auf den raspberry pi deployed werden soll, muss er auf den main branch gemerged werden. Um vom Raspberry geklont werden zu können, muss der main branch über die remote "release" auf das repository https://github.com/jonaRumberg/sap_stand_release gepusht werden. Der Node server des Raspberry besitzt einen Endpunkt "/pull", der automatisch ein shell skript aufruft, welches den aktuellen stand des Codes repliziert.
 
 ## Code_Doku
 
