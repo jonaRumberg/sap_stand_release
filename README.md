@@ -51,3 +51,10 @@ Eine Angabe zur Lizenz des Projekts, unter der es veröffentlicht wird.
 
 Hier könnten Kontaktdaten oder Links zu den Maintainern oder der Community stehen.
 
+## Passwörter
+Raspberry Pi
+user: pi
+password: vttech
+ssid: StandLAN
+password: SAPSTAND123
+
