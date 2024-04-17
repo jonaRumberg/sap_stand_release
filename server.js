@@ -104,4 +104,4 @@ const updateStepper = () => {
 
 const resetStepper = () => setServoArray([0,0,0,0]);
 
-setInterval(updateStepper, 1500);
+setInterval(updateStepper, 1);
