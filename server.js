@@ -78,7 +78,7 @@ app.listen(3000, () => {
         console.log("Der Arduino Server ist gestartet auf Port 3000");
 });
 
-app.get("/rotateonce/:direction/:steps", async (req, res) => {
+app.get("/rotateonce/:direction/:steps", (req, res) => {
         const direction = req.params.direction;
         const steps = parseInt(req.params.steps);
     
@@ -91,9 +91,7 @@ app.get("/rotateonce/:direction/:steps", async (req, res) => {
         }
     
         try {
-            const result = await executeSingleRotation(direction, steps).then(()=>{
-                console.log("promise aufgelöst!");
-            });
+            const result = executeSingleRotation(direction, steps)
             res.status(200).send("erfolg");
         } catch (error) {
             console.error("Fehler beim Drehen des Motors:", error);
@@ -105,14 +103,12 @@ var stepCount = 0;
 var stepperDir = 0;
 
 const executeSingleRotation = (direction, steps) => {
-        return new Promise((resolve, reject) => {
             let stepCounter = 0;
             const interval = setInterval(() => {
                 if (stepCounter >= steps) {
                     clearInterval(interval);
                     resetStepper();
                     console.log("bevor resolve")
-                    resolve("Motor drehte sich einmal");
                 } else {
                     if (direction === "forward") {
                         stepMotorForward();
@@ -123,7 +119,6 @@ const executeSingleRotation = (direction, steps) => {
                 }
                 updateStepper();
             }, 1);
-        });
     };
 
 const stepMotorForward = () => {
