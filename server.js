@@ -53,9 +53,6 @@ app.get("/enginefwd", (_req, res) => {
 
 app.get("/enginebwd", (_req, res) => {
         stepperDir = -1;
-        setTimeout(() => {
-               stepperDir = 0; 
-        }, 1500);
         res.status(200).send("Motor dreht sich jetzt");
 });
 
@@ -96,6 +93,7 @@ const stepMotorBackward = () => {
         if (stepCount < 0) {
                 stepCount = 7;
         }
+        stepperDir = 0;
         setServoArray(stepSequence[stepCount]);
 }
 
@@ -107,4 +105,4 @@ const updateStepper = () => {
 
 const resetStepper = () => setServoArray([0,0,0,0]);
 
-setInterval(updateStepper, 1);
+setInterval(updateStepper, 1500);
