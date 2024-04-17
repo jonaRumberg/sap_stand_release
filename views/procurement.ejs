@@ -85,7 +85,8 @@
                 };
                 xhr.send()
 
-                xhr = new XMLHttpRequest();
+                setTimeout(() => {
+                    xhr = new XMLHttpRequest();
                 xhr.open('GET', './enginestp', true);
                 xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
@@ -93,7 +94,8 @@
                     console.log('Serverantwort:', response);
                 }
                 };
-                xhr.send()
+                xhr.send()                    
+                }, 1500);
 
                 setTimeout(function () {
                     toast.classList.add("show");
