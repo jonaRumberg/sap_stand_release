@@ -91,7 +91,9 @@ app.get("/rotateonce/:direction/:steps", async (req, res) => {
         }
     
         try {
-            const result = await executeSingleRotation(direction, steps);
+            const result = await executeSingleRotation(direction, steps).then(()=>{
+                console.log("promise aufgelöst!");
+            });
             res.status(200).send(result);
         } catch (error) {
             console.error("Fehler beim Drehen des Motors:", error);
@@ -105,6 +107,7 @@ var stepperDir = 0;
 const executeSingleRotation = (direction, steps) => {
         return new Promise((resolve, reject) => {
             let stepCounter = 0;
+            setInterval(updateStepper, 1);
             const interval = setInterval(() => {
                 if (stepCounter >= steps) {
                     clearInterval(interval);
@@ -120,6 +123,7 @@ const executeSingleRotation = (direction, steps) => {
                 }
             }, 1);
         });
+        
     };
 
 const stepMotorForward = () => {
@@ -146,4 +150,4 @@ const updateStepper = () => {
 
 const resetStepper = () => setServoArray([0,0,0,0]);
 
-setInterval(updateStepper, 1);
+
