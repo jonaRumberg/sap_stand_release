@@ -61,7 +61,6 @@ app.get("/enginestp", (_req, res) => {
         res.status(200).send("Motor dreht sich jetzt");
 });
 
-
 app.get("/pull", (_req, res) => {
         var yourscript = exec('sh pull.sh',
         (error, stdout, stderr) => {
