@@ -107,7 +107,6 @@ var stepperDir = 0;
 const executeSingleRotation = (direction, steps) => {
         return new Promise((resolve, reject) => {
             let stepCounter = 0;
-            setInterval(updateStepper, 1);
             const interval = setInterval(() => {
                 if (stepCounter >= steps) {
                     clearInterval(interval);
@@ -121,9 +120,9 @@ const executeSingleRotation = (direction, steps) => {
                     }
                     stepCounter++;
                 }
+                updateStepper();
             }, 1);
         });
-        
     };
 
 const stepMotorForward = () => {
@@ -150,4 +149,4 @@ const updateStepper = () => {
 
 const resetStepper = () => setServoArray([0,0,0,0]);
 
-
+setInterval(updateStepper, 1);
