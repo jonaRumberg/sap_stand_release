@@ -46,12 +46,12 @@ app.get("/studiengaenge", (_req, res) => {
 });
 
 app.get("/enginefwd", (_req, res) => {
-        stepperDir = 1;
+        stepperDir = -1;
         res.status(200).send("Motor dreht sich jetzt");
 });
 
 app.get("/enginebwd", (_req, res) => {
-        stepperDir = -1;
+        stepperDir = 1;
         res.status(200).send("Motor dreht sich jetzt");
 });
 
