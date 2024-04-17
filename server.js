@@ -47,18 +47,18 @@ app.get("/studiengaenge", (_req, res) => {
 });
 
 app.get("/enginefwd", (_req, res) => {
-        stepperDir = 1;
-        res.status(200).send("Motor dreht sich jetzt");
+        stepperDir = -1;
+        res.status(200).send("Motor dreht sich jetzt fwd");
 });
 
 app.get("/enginebwd", (_req, res) => {
-        stepperDir = -1;
-        res.status(200).send("Motor dreht sich jetzt");
+        stepperDir = 1;
+        res.status(200).send("Motor dreht sich jetzt bwd");
 });
 
 app.get("/enginestp", (_req, res) => {
         stepperDir = 0;
-        res.status(200).send("Motor dreht sich jetzt");
+        res.status(200).send("Motor dreht sich jetzt nicht mehr");
 });
 
 app.get("/pull", (_req, res) => {
@@ -66,6 +66,7 @@ app.get("/pull", (_req, res) => {
         (error, stdout, stderr) => {
             console.log(stdout);
             console.log(stderr);
+            console.log(error);
             if (error !== null) {
                 res.status(404).send(`exec error: ${error}`);
                 console.log(`exec error: ${error}`);
@@ -83,6 +84,7 @@ const stepMotorForward = () => {
         stepCount = stepCount + 1
         if (stepCount > 7) {
                 stepCount = 0;
+                stepperDir = 0;
         }
         setServoArray(stepSequence[stepCount]);
 }
