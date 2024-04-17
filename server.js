@@ -96,13 +96,12 @@ const stepMotorBackward = () => {
 }
 
 const updateStepper = () => {
-        if (stepperDir == -1) stepMotorBackward().then(()=>{
-                setTimeout(() => {
-                       stepperDir = 0; 
-                }, 1500);
-        });
-        if (stepperDir == 1) stepMotorForward();
-        if (stepperDir == 0) resetStepper();
+        setInterval(()=>{
+                if (stepperDir == -1) stepMotorBackward();
+                if (stepperDir == 1) stepMotorForward();
+                if (stepperDir == 0) resetStepper();
+        },1500)
+        stepperDir = 0;
 }
 
 const resetStepper = () => setServoArray([0,0,0,0]);
