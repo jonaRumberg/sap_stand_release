@@ -46,12 +46,12 @@ app.get("/studiengaenge", (_req, res) => {
 });
 
 app.get("/enginefwd", (_req, res) => {
-        stepperDir = -1;
+        stepperDir = 1;
         res.status(200).send("Motor dreht sich jetzt");
 });
 
 app.get("/enginebwd", (_req, res) => {
-        stepperDir = 1;
+        stepperDir = -1;
         res.status(200).send("Motor dreht sich jetzt");
 });
 
@@ -96,12 +96,9 @@ const stepMotorBackward = () => {
 }
 
 const updateStepper = () => {
-        setInterval(()=>{
-                if (stepperDir == -1) stepMotorBackward();
-                if (stepperDir == 1) stepMotorForward();
-                if (stepperDir == 0) resetStepper();
-        },1500)
-        stepperDir = 0;
+        if (stepperDir == -1) stepMotorBackward();
+        if (stepperDir == 1) stepMotorForward();
+        if (stepperDir == 0) resetStepper();
 }
 
 const resetStepper = () => setServoArray([0,0,0,0]);
