@@ -114,9 +114,9 @@ const executeSingleRotation = (direction, steps) => {
                 } else {
                         console.log("in der else verzweigung")
                     if (direction === "forward") {
-                        stepMotorForward();
+                        stepperDir = 1;
                     } else if (direction === "backward") {
-                        stepMotorBackward();
+                        stepperDir = -1;
                     }
                     stepCounter++;
                 }
