@@ -94,7 +94,7 @@ app.get("/rotateonce/:direction/:steps", async (req, res) => {
             const result = await executeSingleRotation(direction, steps).then(()=>{
                 console.log("promise aufgelöst!");
             });
-            res.status(200).send(result);
+            res.status(200).send("erfolg");
         } catch (error) {
             console.error("Fehler beim Drehen des Motors:", error);
             res.status(500).send("Ein Fehler ist aufgetreten");
@@ -111,6 +111,7 @@ const executeSingleRotation = (direction, steps) => {
                 if (stepCounter >= steps) {
                     clearInterval(interval);
                     resetStepper();
+                    console.log("bevor resolve")
                     resolve("Motor drehte sich einmal");
                 } else {
                     if (direction === "forward") {
