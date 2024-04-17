@@ -120,7 +120,6 @@ const executeSingleRotation = (direction, steps) => {
                     }
                     stepCounter++;
                 }
-                updateStepper();
             }, 1);
     };
 
