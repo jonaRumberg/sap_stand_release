@@ -84,7 +84,6 @@ const stepMotorForward = () => {
         stepCount = stepCount + 1
         if (stepCount > 7) {
                 stepCount = 0;
-                stepperDir = 0;
         }
         setServoArray(stepSequence[stepCount]);
 }
