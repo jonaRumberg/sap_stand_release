@@ -2,6 +2,7 @@ const express = require("express");
 const Gpio = require("onoff").Gpio;
 
 const { exec } = require('child_process');
+const { setTimeout } = require("timers/promises");
 
 const app = express();
 
@@ -52,6 +53,9 @@ app.get("/enginefwd", (_req, res) => {
 
 app.get("/enginebwd", (_req, res) => {
         stepperDir = -1;
+        setTimeout(() => {
+               stepperDir = 0; 
+        }, 1500);
         res.status(200).send("Motor dreht sich jetzt");
 });
 
