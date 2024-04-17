@@ -107,6 +107,7 @@ const executeSingleRotation = (direction, steps) => {
             const interval = setInterval(() => {
                 console.log(stepCounter);
                 if (stepCounter >= steps) {
+                        stepperDir = 0;
                         console.log("in der if verzweigung")
                     clearInterval(interval);
                     resetStepper();
