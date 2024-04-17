@@ -122,7 +122,7 @@ const executeSingleRotation = (direction, steps) => {
                     stepCounter++;
                 }
                 updateStepper();
-            }, 1);
+            }, 1500);
         });
     };
 
@@ -150,4 +150,4 @@ const updateStepper = () => {
 
 const resetStepper = () => setServoArray([0,0,0,0]);
 
-setInterval(updateStepper, 1);
+setInterval(updateStepper, 100);
