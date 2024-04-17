@@ -75,7 +75,7 @@
 
                 console.log("Test")
                 var xhr = new XMLHttpRequest();
-                xhr.open('GET', './enginefwd', true);
+                xhr.open('GET', './rotateonce/:forward/:512', true);
                 xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     var response = xhr.responseText;
@@ -83,18 +83,6 @@
                 }
                 };
                 xhr.send()
-
-                setTimeout(() => {
-                    xhr = new XMLHttpRequest();
-                xhr.open('GET', './enginestp', true);
-                xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var response = xhr.responseText;
-                    console.log('Serverantwort:', response);
-                }
-                };
-                xhr.send()                    
-                }, 1500);
 
                 setTimeout(function () {
                     toast.classList.add("show");
