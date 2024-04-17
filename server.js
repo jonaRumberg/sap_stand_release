@@ -105,11 +105,14 @@ var stepperDir = 0;
 const executeSingleRotation = (direction, steps) => {
             let stepCounter = 0;
             const interval = setInterval(() => {
+                console.log(stepCounter);
                 if (stepCounter >= steps) {
+                        console.log("in der if verzweigung")
                     clearInterval(interval);
                     resetStepper();
                     console.log("bevor resolve")
                 } else {
+                        console.log("in der else verzweigung")
                     if (direction === "forward") {
                         stepMotorForward();
                     } else if (direction === "backward") {
