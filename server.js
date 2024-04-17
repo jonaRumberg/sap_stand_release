@@ -1,8 +1,6 @@
 const express = require("express");
 const Gpio = require("onoff").Gpio;
 
-const { exec } = require('child_process');
-
 const app = express();
 
 app.set('view engine', 'ejs')
@@ -16,105 +14,79 @@ const let22 = new Gpio(22, 'out');
 const let23 = new Gpio(23, 'out');
 
 const setServoArray = (arr) => {
-        let17.writeSync(arr[0]);
-        let27.writeSync(arr[1]);
-        let22.writeSync(arr[2]);
-        let23.writeSync(arr[3]);
+    let17.writeSync(arr[0]);
+    let27.writeSync(arr[1]);
+    let22.writeSync(arr[2]);
+    let23.writeSync(arr[3]);
 }
 
 const stepSequence = [
-        [1,0,0,0],
-        [1,1,0,0],
-        [0,1,0,0],
-        [0,1,1,0],
-        [0,0,1,0],
-        [0,0,1,1],
-        [0,0,0,1],
-        [1,0,0,1],
+    [1,0,0,0],
+    [1,1,0,0],
+    [0,1,0,0],
+    [0,1,1,0],
+    [0,0,1,0],
+    [0,0,1,1],
+    [0,0,0,1],
+    [1,0,0,1],
 ];
 
 app.get("/", (_req, res) => {
-        res.render("index");
+    res.render("index");
 });
 
 app.get("/procurement", (_req, res) => {
-        res.render("procurement");
+    res.render("procurement");
 });
 
 app.get("/studiengaenge", (_req, res) => {
-        res.render("studiengaenge");
+    res.render("studiengaenge");
 });
-
-app.get("/on", (_req, res) => {
-        // Code zum Einschalten der LED rpio.write(let4, rpio.HIGH);
-        let4.writeSync(1);
-        res.send("eingeschaltet");
-});
-
-app.get("/off", (_req, res) => {
-        // Code zum Ausschalten der LED
-        let4.writeSync(0);
-        res.send("ausgeschaltet");
-});
-
 
 app.get("/enginefwd", (_req, res) => {
-        stepperDir = 1;
-        res.status(200).send("Motor dreht sich jetzt");
+    rotateMotorOnce('forward', 512); // Eine volle Umdrehung vorwärts besteht aus 512 Schritten
+    res.status(200).send("Motor dreht sich jetzt");
 });
 
 app.get("/enginebwd", (_req, res) => {
-        stepperDir = -1;
-        res.status(200).send("Motor dreht sich jetzt");
+    rotateMotorOnce('backward', 512); // Eine volle Umdrehung rückwärts besteht aus 512 Schritten
+    res.status(200).send("Motor dreht sich jetzt");
 });
 
 app.get("/enginestp", (_req, res) => {
-        stepperDir = 0;
-        res.status(200).send("Motor dreht sich jetzt");
-});
-
-
-app.get("/pull", (_req, res) => {
-        var yourscript = exec('sh pull.sh',
-        (error, stdout, stderr) => {
-            console.log(stdout);
-            console.log(stderr);
-            if (error !== null) {
-                console.log(`exec error: ${error}`);
-            }
-        });
-
-        res.status(200).send("Pulling code");
+    resetStepper();
+    res.status(200).send("Motor gestoppt");
 });
 
 app.listen(3000, () => {
-        console.log("Der Arduino Server ist gestartet auf Port 3000");
+    console.log("Der Arduino Server ist gestartet auf Port 3000");
 });
 
-var stepCount = 0;
-var stepperDir = 0;
-const stepMotorForward = () => {
-        stepCount = stepCount + 1
-        if (stepCount > 7) {
-                stepCount = 0;
-        }
-        setServoArray(stepSequence[stepCount]);
-}
+const rotateMotorOnce = (direction, steps) => {
+    let stepCount = 0;
+    const delayBetweenSteps = 5; // Verzögerung zwischen jedem Schritt in Millisekunden
 
-const stepMotorBackward = () => {
-        stepCount = stepCount - 1
-        if (stepCount < 0) {
-                stepCount = 7;
+    const step = () => {
+        if (stepCount < steps) {
+            if (direction === 'forward') {
+                stepCount++;
+                if (stepCount > 7) {
+                    stepCount = 0;
+                }
+            } else if (direction === 'backward') {
+                stepCount--;
+                if (stepCount < 0) {
+                    stepCount = 7;
+                }
+            }
+            setServoArray(stepSequence[stepCount]);
+            setTimeout(step, delayBetweenSteps);
+        } else {
+            resetStepper(); // Stepper zurücksetzen, wenn alle Schritte abgeschlossen sind
         }
-        setServoArray(stepSequence[stepCount]);
-}
+    };
 
-const updateStepper = () => {
-        if (stepperDir == -1) stepMotorBackward();
-        if (stepperDir == 1) stepMotorForward();
-        if (stepperDir == 0) resetStepper();
-}
+    step(); // Starten des Drehens
+};
 
 const resetStepper = () => setServoArray([0,0,0,0]);
-
-setInterval(updateStepper, 1);
