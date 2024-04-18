@@ -137,9 +137,9 @@ const executeSingleRotation = (steps) => {
     };
 
 const stepMotorForward = () => {
-        stepCount = stepCount - 1
-        if (stepCount < 0) {
-                stepCount = 7;
+        stepCount = stepCount + 1
+        if (stepCount > 0) {
+                stepCount = 0;
         }
         setServoArray(stepSequence[stepCount]);
 }
