@@ -167,6 +167,9 @@ const updateStepper = () => {
         if (stepperDir == 0) resetStepper();
 }
 
-const resetStepper = () => setServoArray([0,0,0,0]);
-
+const resetStepper = () => {
+        setServoArray([0,0,0,0]);
+        setServoArray2([0,0,0,0]);
+        
+}
 setInterval(updateStepper, 1);
