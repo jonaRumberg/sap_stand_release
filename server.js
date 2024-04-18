@@ -97,11 +97,21 @@ app.listen(3000, () => {
         console.log("Der Arduino Server ist gestartet auf Port 3000");
 });
 
-app.get("/rotateonce", (req, res) => {
-        const steps = 5000;    
+app.get("/rotateonce/:direction/:steps", (req, res) => {
+        const direction = req.params.direction;
+        const steps = parseInt(req.params.steps);
+    
+        if (direction !== "forward" && direction !== "backward") {
+            return res.status(400).send("Ungültige Richtung");
+        }
+    
+        if (isNaN(steps) || steps <= 0) {
+            return res.status(400).send("Ungültige Schrittzahl");
+        }
+    
         try {
-            const result = executeSingleRotation(steps)
-            res.status(200);
+            const result = executeSingleRotation(direction, steps)
+            res.status(200).send("erfolg");
         } catch (error) {
             console.error("Fehler beim Drehen des Motors:", error);
             res.status(500).send("Ein Fehler ist aufgetreten");
@@ -110,30 +120,27 @@ app.get("/rotateonce", (req, res) => {
 
 var stepCount = 0;
 var stepperDir = 0;
-var engineselection = 1;
 
-const executeSingleRotation = (steps) => {
-        let stepCounter = 0;
-        const interval = setInterval(() => {
-        console.log(stepCounter);
-        if (stepCounter >= steps) {
-                stepperDir = 0;
-                console.log("in der if verzweigung")
-                clearInterval(interval);
-                resetStepper();
-                console.log("bevor resolve")
-        } else {
-                console.log("in der else verzweigung");
-                if(engineselection==1) stepperDir = 1;
-                if(engineselection==2) stepperDir = 2;
-                stepCounter++;
-        }
-        }, 1);
-        engineselection++;
-
-        if (engineselection>2) {
-            engineselection = 1;    
-        }
+const executeSingleRotation = (direction, steps) => {
+            let stepCounter = 0;
+            const interval = setInterval(() => {
+                console.log(stepCounter);
+                if (stepCounter >= steps) {
+                        stepperDir = 0;
+                        console.log("in der if verzweigung")
+                    clearInterval(interval);
+                    resetStepper();
+                    console.log("bevor resolve")
+                } else {
+                        console.log("in der else verzweigung")
+                    if (direction === "forward") {
+                        stepperDir = 1;
+                    } else if (direction === "backward") {
+                        stepperDir = -1;
+                    }
+                    stepCounter++;
+                }
+            }, 1);
     };
 
 const stepMotorForward = () => {
@@ -167,9 +174,6 @@ const updateStepper = () => {
         if (stepperDir == 0) resetStepper();
 }
 
-const resetStepper = () => {
-        setServoArray([0,0,0,0]);
-        setServoArray2([0,0,0,0]);
-        
-}
+const resetStepper = () => setServoArray([0,0,0,0]);
+
 setInterval(updateStepper, 1);
