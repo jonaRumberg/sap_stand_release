@@ -23,6 +23,12 @@ const let13 = new Gpio(13, 'out');
 const let19 = new Gpio(19, 'out');
 const let16 = new Gpio(16, 'out');
 
+let2 = new Gpio(2, 'out');
+const let8 = new Gpio(8, 'out');
+const let11 = new Gpio(11, 'out');
+const let9 = new Gpio(9, 'out');
+const let10 = new Gpio(10, 'out');
+
 const setServoArray = (arr) => {
         let17.writeSync(arr[0]);
         let27.writeSync(arr[1]);
@@ -35,6 +41,13 @@ const setServoArray2 = (arr) => {
         let13.writeSync(arr[1]);
         let19.writeSync(arr[2]);
         let23.writeSync(arr[3]);
+}
+
+const setServoArray3 = (arr) => {
+        let8.writeSync(arr[0]);
+        let11.writeSync(arr[1]);
+        let9.writeSync(arr[2]);
+        let10.writeSync(arr[3]);
 }
 
 const stepSequence = [
@@ -80,6 +93,11 @@ app.get("/test", (_req, res) => {
         res.status(200).send("Motor dreht sich jetzt");
 });
 
+app.get("/test2", (_req, res) => {
+        stepperDir = 3;
+        res.status(200).send("Motor dreht sich jetzt");
+});
+
 
 app.get("/pull", (_req, res) => {
         var yourscript = exec('sh pull.sh',
@@ -116,6 +134,7 @@ const executeSingleRotation = (steps) => {
         let stepCounter = 0;
         if(engineselection==1) stepperDir = 1;
         if(engineselection==2) stepperDir = 2;
+        if(engineselection==3) stepperDir = 3;
 
         const interval = setInterval(() => {
         console.log(stepCounter);
@@ -127,10 +146,10 @@ const executeSingleRotation = (steps) => {
                 stepCounter++;
         }
         }, 1);
-        
+
         engineselection++;
 
-        if (engineselection>2) {
+        if (engineselection>3) {
             engineselection = 1;    
         }
     };
@@ -151,15 +170,25 @@ const stepMotorForward2 = () => {
         setServoArray2(stepSequence[stepCount]);
 }
 
+const stepMotorForward3 = () => {
+        stepCount = stepCount + 1
+        if (stepCount > 7) {
+                stepCount = 0;
+        }
+        setServoArray2(stepSequence[stepCount]);
+}
+
 const updateStepper = () => {
         if (stepperDir == 1) stepMotorForward();
         if (stepperDir == 2) stepMotorForward2();
+        if (stepperDir == 3) stepMotorForward3();
         if (stepperDir == 0) resetStepper();
 }
 
 const resetStepper = () => {
         setServoArray([0,0,0,0]);
         setServoArray2([0,0,0,0]);
+        setServoArray3([0,0,0,0]);
         
 }
 setInterval(updateStepper, 1);
