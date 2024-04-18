@@ -93,7 +93,7 @@ app.get("/pull", (_req, res) => {
         }).then(()=>{res.status(200).send("Code pulled successfully");})
 });
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
         console.log("Der Arduino Server ist gestartet auf Port 3000");
 });
 
@@ -118,14 +118,14 @@ const executeSingleRotation = (steps) => {
         if(engineselection==2) stepperDir = 2;
 
         const interval = setInterval(() => {
-        if (stepCounter >= steps/10) {
+        if (stepCounter >= 5) {
                 stepperDir = 0;
                 clearInterval(interval);
                 resetStepper();
         } else {
                 stepCounter++;
         }
-        }, 10);
+        }, 1000);
         
         engineselection++;
 
@@ -161,4 +161,4 @@ const resetStepper = () => {
         setServoArray2([0,0,0,0]);
         
 }
-setInterval(updateStepper, 1);
+setInterval(updateStepper, 1000);
