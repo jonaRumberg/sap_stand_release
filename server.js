@@ -114,21 +114,20 @@ var engineselection = 1;
 
 const executeSingleRotation = (steps) => {
         let stepCounter = 0;
+        if(engineselection==1) stepperDir = 1;
+        if(engineselection==2) stepperDir = 2;
+
         const interval = setInterval(() => {
         console.log(stepCounter);
         if (stepCounter >= steps) {
                 stepperDir = 0;
-                console.log("in der if verzweigung")
                 clearInterval(interval);
                 resetStepper();
-                console.log("bevor resolve")
         } else {
-                console.log("in der else verzweigung");
-                if(engineselection==1) stepperDir = 1;
-                if(engineselection==2) stepperDir = 2;
                 stepCounter++;
         }
         }, 1);
+        
         engineselection++;
 
         if (engineselection>2) {
@@ -137,9 +136,9 @@ const executeSingleRotation = (steps) => {
     };
 
 const stepMotorForward = () => {
-        stepCount = stepCount + 1
-        if (stepCount > 7) {
-                stepCount = 0;
+        stepCount = stepCount - 1
+        if (stepCount < 0) {
+                stepCount = 7;
         }
         setServoArray(stepSequence[stepCount]);
 }
@@ -152,16 +151,7 @@ const stepMotorForward2 = () => {
         setServoArray2(stepSequence[stepCount]);
 }
 
-const stepMotorBackward = () => {
-        stepCount = stepCount - 1
-        if (stepCount < 0) {
-                stepCount = 7;
-        }
-        setServoArray(stepSequence[stepCount]);
-}
-
 const updateStepper = () => {
-        if (stepperDir == -1) stepMotorBackward();
         if (stepperDir == 1) stepMotorForward();
         if (stepperDir == 2) stepMotorForward2();
         if (stepperDir == 0) resetStepper();
