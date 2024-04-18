@@ -16,10 +16,24 @@ const let27 = new Gpio(27, 'out');
 const let22 = new Gpio(22, 'out');
 const let23 = new Gpio(23, 'out');
 
+
+const let2 = new Gpio(2, 'out');
+const let6 = new Gpio(6, 'out');
+const let13 = new Gpio(13, 'out');
+const let19 = new Gpio(19, 'out');
+const let16 = new Gpio(16, 'out');
+
 const setServoArray = (arr) => {
         let17.writeSync(arr[0]);
         let27.writeSync(arr[1]);
         let22.writeSync(arr[2]);
+        let23.writeSync(arr[3]);
+}
+
+const setServoArray2 = (arr) => {
+        let6.writeSync(arr[0]);
+        let13.writeSync(arr[1]);
+        let19.writeSync(arr[2]);
         let23.writeSync(arr[3]);
 }
 
@@ -61,6 +75,11 @@ app.get("/enginestp", (_req, res) => {
         res.status(200).send("Motor dreht sich jetzt");
 });
 
+app.get("/test", (_req, res) => {
+        stepperDir = 2;
+        res.status(200).send("Motor dreht sich jetzt");
+});
+
 
 app.get("/pull", (_req, res) => {
         var yourscript = exec('sh pull.sh',
@@ -78,21 +97,11 @@ app.listen(3000, () => {
         console.log("Der Arduino Server ist gestartet auf Port 3000");
 });
 
-app.get("/rotateonce/:direction/:steps", (req, res) => {
-        const direction = req.params.direction;
-        const steps = parseInt(req.params.steps);
-    
-        if (direction !== "forward" && direction !== "backward") {
-            return res.status(400).send("Ungültige Richtung");
-        }
-    
-        if (isNaN(steps) || steps <= 0) {
-            return res.status(400).send("Ungültige Schrittzahl");
-        }
-    
+app.get("/rotateonce", (req, res) => {
+        const steps = 5000;    
         try {
-            const result = executeSingleRotation(direction, steps)
-            res.status(200).send("erfolg");
+            const result = executeSingleRotation(steps)
+            res.status(200);
         } catch (error) {
             console.error("Fehler beim Drehen des Motors:", error);
             res.status(500).send("Ein Fehler ist aufgetreten");
@@ -101,27 +110,30 @@ app.get("/rotateonce/:direction/:steps", (req, res) => {
 
 var stepCount = 0;
 var stepperDir = 0;
+var engineselection = 1;
 
-const executeSingleRotation = (direction, steps) => {
-            let stepCounter = 0;
-            const interval = setInterval(() => {
-                console.log(stepCounter);
-                if (stepCounter >= steps) {
-                        stepperDir = 0;
-                        console.log("in der if verzweigung")
-                    clearInterval(interval);
-                    resetStepper();
-                    console.log("bevor resolve")
-                } else {
-                        console.log("in der else verzweigung")
-                    if (direction === "forward") {
-                        stepperDir = 1;
-                    } else if (direction === "backward") {
-                        stepperDir = -1;
-                    }
-                    stepCounter++;
-                }
-            }, 1);
+const executeSingleRotation = (steps) => {
+        let stepCounter = 0;
+        const interval = setInterval(() => {
+        console.log(stepCounter);
+        if (stepCounter >= steps) {
+                stepperDir = 0;
+                console.log("in der if verzweigung")
+                clearInterval(interval);
+                resetStepper();
+                console.log("bevor resolve")
+        } else {
+                console.log("in der else verzweigung");
+                if(engineselection==1) stepperDir = 1;
+                if(engineselection==2) stepperDir = 2;
+                stepCounter++;
+        }
+        }, 1);
+        engineselection++;
+
+        if (engineselection>2) {
+            engineselection = 1;    
+        }
     };
 
 const stepMotorForward = () => {
@@ -130,6 +142,14 @@ const stepMotorForward = () => {
                 stepCount = 0;
         }
         setServoArray(stepSequence[stepCount]);
+}
+
+const stepMotorForward2 = () => {
+        stepCount = stepCount + 1
+        if (stepCount > 7) {
+                stepCount = 0;
+        }
+        setServoArray2(stepSequence[stepCount]);
 }
 
 const stepMotorBackward = () => {
@@ -143,9 +163,13 @@ const stepMotorBackward = () => {
 const updateStepper = () => {
         if (stepperDir == -1) stepMotorBackward();
         if (stepperDir == 1) stepMotorForward();
+        if (stepperDir == 2) stepMotorForward2();
         if (stepperDir == 0) resetStepper();
 }
 
-const resetStepper = () => setServoArray([0,0,0,0]);
-
+const resetStepper = () => {
+        setServoArray([0,0,0,0]);
+        setServoArray2([0,0,0,0]);
+        
+}
 setInterval(updateStepper, 1);
