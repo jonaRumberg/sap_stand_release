@@ -100,8 +100,8 @@ app.listen(3000, () => {
 app.get("/rotateonce", (req, res) => {
         const steps = 5000;    
         try {
+            res.status(200); 
             const result = executeSingleRotation(steps)
-            res.status(200);
         } catch (error) {
             console.error("Fehler beim Drehen des Motors:", error);
             res.status(500).send("Ein Fehler ist aufgetreten");
@@ -118,15 +118,14 @@ const executeSingleRotation = (steps) => {
         if(engineselection==2) stepperDir = 2;
 
         const interval = setInterval(() => {
-        console.log(stepCounter);
-        if (stepCounter >= steps) {
+        if (stepCounter >= steps/10) {
                 stepperDir = 0;
                 clearInterval(interval);
                 resetStepper();
         } else {
                 stepCounter++;
         }
-        }, 1);
+        }, 10);
         
         engineselection++;
 
