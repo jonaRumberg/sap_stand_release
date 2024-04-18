@@ -97,20 +97,15 @@ app.listen(3000, () => {
         console.log("Der Arduino Server ist gestartet auf Port 3000");
 });
 
-app.get("/rotateonce/:direction/:steps", (req, res) => {
-        const direction = req.params.direction;
-        const steps = parseInt(req.params.steps);
-    
-        if (direction !== "forward" && direction !== "backward") {
-            return res.status(400).send("Ungültige Richtung");
-        }
+app.get("/rotateonce/:steps", (req, res) => {
+        const steps = parseInt(req.params.steps);    
     
         if (isNaN(steps) || steps <= 0) {
             return res.status(400).send("Ungültige Schrittzahl");
         }
     
         try {
-            const result = executeSingleRotation(direction, steps)
+            const result = executeSingleRotation( steps)
             res.status(200).send("erfolg");
         } catch (error) {
             console.error("Fehler beim Drehen des Motors:", error);
@@ -120,8 +115,8 @@ app.get("/rotateonce/:direction/:steps", (req, res) => {
 
 var stepCount = 0;
 var stepperDir = 0;
-
-const executeSingleRotation = (direction, steps) => {
+var engineselection = 0;
+const executeSingleRotation = (steps) => {
             let stepCounter = 0;
             const interval = setInterval(() => {
                 console.log(stepCounter);
@@ -133,10 +128,19 @@ const executeSingleRotation = (direction, steps) => {
                     console.log("bevor resolve")
                 } else {
                         console.log("in der else verzweigung")
-                    if (direction === "forward") {
+
+                switch (engineselection) {
+                        case 0: stepperDir = 1; break;
+                
+                        case 1: stepperDir = 2; break;
+                        default: break;
+                }
+                    if (engineselection = 0) {
                         stepperDir = 1;
-                    } else if (direction === "backward") {
-                        stepperDir = -1;
+                    } else if (engoin) {
+                        
+                    } else {
+                        
                     }
                     stepCounter++;
                 }
