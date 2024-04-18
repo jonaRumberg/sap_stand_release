@@ -16,10 +16,24 @@ const let27 = new Gpio(27, 'out');
 const let22 = new Gpio(22, 'out');
 const let23 = new Gpio(23, 'out');
 
+
+const let2 = new Gpio(2, 'out');
+const let6 = new Gpio(6, 'out');
+const let13 = new Gpio(13, 'out');
+const let19 = new Gpio(16, 'out');
+const let16 = new Gpio(16, 'out');
+
 const setServoArray = (arr) => {
         let17.writeSync(arr[0]);
         let27.writeSync(arr[1]);
         let22.writeSync(arr[2]);
+        let23.writeSync(arr[3]);
+}
+
+const setServoArray2 = (arr) => {
+        let6.writeSync(arr[0]);
+        let13.writeSync(arr[1]);
+        let19.writeSync(arr[2]);
         let23.writeSync(arr[3]);
 }
 
@@ -58,6 +72,11 @@ app.get("/enginebwd", (_req, res) => {
 
 app.get("/enginestp", (_req, res) => {
         stepperDir = 0;
+        res.status(200).send("Motor dreht sich jetzt");
+});
+
+app.get("/test", (_req, res) => {
+        stepperDir = 2;
         res.status(200).send("Motor dreht sich jetzt");
 });
 
@@ -132,6 +151,14 @@ const stepMotorForward = () => {
         setServoArray(stepSequence[stepCount]);
 }
 
+const stepMotorForward2 = () => {
+        stepCount = stepCount + 1
+        if (stepCount > 7) {
+                stepCount = 0;
+        }
+        setServoArray2(stepSequence[stepCount]);
+}
+
 const stepMotorBackward = () => {
         stepCount = stepCount - 1
         if (stepCount < 0) {
@@ -143,6 +170,7 @@ const stepMotorBackward = () => {
 const updateStepper = () => {
         if (stepperDir == -1) stepMotorBackward();
         if (stepperDir == 1) stepMotorForward();
+        if (stepperDir == 2) stepMotorForward2();
         if (stepperDir == 0) resetStepper();
 }
 
