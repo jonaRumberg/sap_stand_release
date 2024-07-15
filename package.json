@@ -1,7 +1,7 @@
 {
   "name": "sap_stand",
   "version": "1.0.0",
-  "description": "Repo for developing the SAP-Stand and potential SAP-Tower software",
+  "description": "Repo for developing the SAP-Stand software",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
