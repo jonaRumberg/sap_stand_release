@@ -1,13 +1,40 @@
-import {List, Page, StandardListItem, Button, Bar, Toast, ToastDomRef, Label, Title, Table, CustomListItem, Text, Icon, FlexBox } from "@ui5/webcomponents-react";
-import { useRef } from "react"
+import {List, Page, StandardListItem, Button, Bar, Toast, ToastDomRef, Label, Title, Table, CustomListItem, Text, Icon, FlexBox, Input } from "@ui5/webcomponents-react";
+import { useRef, useState} from "react"
 import "./ProductionList.css"
 
 const ProductionList = () => {
-    const toast = useRef<ToastDomRef>(null)
+    const [filteredProductionOrders, setFilteredProductionOrders] = useState([]);
+    const toast = useRef<ToastDomRef>(null);
 
     const showToast = () => {
         toast.current?.show();
     };
+
+    const handleChange = (event) => {
+        const query = event.target.value.toLowerCase();
+        const tempOrders = [];
+
+        productionOrders.forEach(object => {
+            const valueString = getObjectValues(object).join().toLowerCase();
+            
+            if (valueString.includes(query)){
+                tempOrders.push(object);                
+            } 
+        });
+        setFilteredProductionOrders(tempOrders);
+    };
+
+    function getObjectValues(obj) {
+        let values = [];
+        for (let key in obj) {
+            if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+                values = values.concat(getObjectValues(obj[key]));
+            } else {
+                values.push(obj[key]);
+            }
+        }
+        return values;
+    }
 
     const productionOrders = [
         {
@@ -102,10 +129,11 @@ const ProductionList = () => {
         }
     ];
     
-    
     return (
         <>
-            <Page style={{height:"calc(100vh - 304px)"}}>
+            <Page 
+                style={{height:"96vh"}}
+            >
                 <Bar
                     design="Header"
                     startContent={
@@ -118,6 +146,15 @@ const ProductionList = () => {
                         </Button>
                     }
                     >
+                    <Input
+                        icon={<Icon name="search" />}
+                        onInput={handleChange}
+
+                        onSuggestionItemPreview={function _a(){}}
+                        onSuggestionItemSelect={function _a(){}}
+                        type="Text"
+                        valueState="None"
+                    />
                 </Bar>
                 
                 <List
@@ -127,7 +164,7 @@ const ProductionList = () => {
                     separators="All"
                 >
                     {
-                        productionOrders.map(i => 
+                        filteredProductionOrders.map(i => 
                             <CustomListItem
                                 style={{
                                     height:"fit-content", 
@@ -135,14 +172,16 @@ const ProductionList = () => {
                                 }}
                             >
                                 <FlexBox justifyContent="SpaceBetween" alignItems="Center" style={{width: '100%'}} >
-                                    <Icon name={i.icon_name} className="ListColumn" design={i.icon_design}/>
-                                    <Title level="H5" className="ListColumn">
-                                        {i.product}
-                                    </Title>
-                                    <div className="ListColumn">
-                                        {i.color} <br/>
-                                        {i.quantity} Stück <br/>
-                                        {i.plant}, Linie {i.lane}
+                                    <div style={{display: "flex"}}>
+                                        <Icon name={i.icon_name} className="ListColumn" design={i.icon_design}/>
+                                        <Title level="H5" className="ListColumn" style={{width:"200px"}}>
+                                            {i.product}
+                                        </Title>
+                                        <div className="ListColumn">
+                                            {i.color} <br/>
+                                            {i.quantity} Stück <br/>
+                                            {i.plant}, Linie {i.lane}
+                                        </div>
                                     </div>
                                     <Icon name="navigation-right-arrow"/>
                                 </FlexBox>
