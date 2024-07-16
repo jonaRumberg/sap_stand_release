@@ -3,6 +3,7 @@ import App from "../App";
 import ErrorPage from "../pages/ErrorPage";
 import Launchpad from "../pages/FLP";
 import InfoPageStudies from "../pages/InfoPageStudies";
+import OrderOverview from "../pages/OrderOverview";
 
 export const router = createBrowserRouter([
     {
@@ -13,7 +14,8 @@ export const router = createBrowserRouter([
             { path: "/", element: <Launchpad /> },
             { path: "/results", element: <Launchpad /> },
             { path: "*", element: <Launchpad /> },
-            { path: "/info", element: < InfoPageStudies/> }
+            { path: "/orders", element: <OrderOverview/> },
+            { path: "/info", element: <InfoPageStudies/> }
         ]
     }
 ]);

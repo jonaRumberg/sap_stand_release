@@ -1,6 +1,7 @@
 // there must be a better way to handle icons..
 import '@ui5/webcomponents-icons/dist/begin.js'
 import '@ui5/webcomponents-icons/dist/opportunity.js'
+import '@ui5/webcomponents-icons/dist/accounting-document-verification.js'
 
 import { FioriLikeCard } from '../components/FioriLikeCard';
 import { FlexBox, Title } from '@ui5/webcomponents-react';
@@ -31,10 +32,10 @@ const Launchpad = () => {
                                 callback={()=>alert("asdf")}
                                 />
                             <FioriLikeCard 
-                                title='Produktionsplanung' 
-                                subtitle="Produziere Gummibären" 
-                                callback={()=>alert("asdf")}
-                                icon="begin"/>
+                                title='Einkauf' 
+                                subtitle="Verwalte Einkaufsaufträge" 
+                                callback={() => navigate("/orders")}
+                                icon="accounting-document-verification"/>
                         </FlexBox>
                         <Title level='H3'>Information</Title>
                         <FlexBox style={{gap: "20px"}}>
