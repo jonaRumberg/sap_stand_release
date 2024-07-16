@@ -15,7 +15,10 @@
     "@ui5/webcomponents-icons": "~1.24.0",
     "@ui5/webcomponents-react": "~1.29.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-cookie": "^7.1.4",
+    "react-dom": "^18.3.1",
+    "react-router": "^6.24.1",
+    "react-router-dom": "^6.24.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
