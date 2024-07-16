@@ -1,11 +1,12 @@
 import { Card, CardHeader, FlexBox, Icon } from "@ui5/webcomponents-react"
 
 export const FioriLikeCard = (
-    { title, subtitle, icon }: {title: string, subtitle: string, icon: string},
+    { title, subtitle, icon, callback }: {title: string, subtitle: string, icon: string, callback: () => void},
 ) => {
     return (
         <>
             <Card
+                onClick={callback}
                 header={
                     <CardHeader
                         titleText={title}
@@ -16,6 +17,7 @@ export const FioriLikeCard = (
                 style={{
                     width: "auto",
                     aspectRatio: "1/1",
+                    cursor: "pointer"
                 }}
             >
                 <FlexBox
