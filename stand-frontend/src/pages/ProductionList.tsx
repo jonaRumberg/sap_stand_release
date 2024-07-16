@@ -138,7 +138,7 @@ const ProductionList = () => {
                     design="Header"
                     startContent={
                         <Title level="H4">
-                            Produktionsauftrag (10)
+                            Produktionsauftrag ({filteredProductionOrders.length})
                         </Title>}
                     endContent={
                         <Button>
