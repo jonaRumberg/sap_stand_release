@@ -8,9 +8,9 @@ export const router = createBrowserRouter([
     {
         element: <App />,
         errorElement: <ErrorPage />,
-        children: [{ path: "/productionList", element: <ProductionList /> },
-                    { path: "/", element: <Launchpad /> },
+        children: [{ path: "/", element: <Launchpad /> },
                    { path: "/results", element: <Launchpad /> },
+                   { path: "/productionList", element: <ProductionList /> },
                    { path: "*", element: <Launchpad /> }]
     }
 ]);
