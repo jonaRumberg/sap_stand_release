@@ -16,7 +16,6 @@ export const FioriLikeCard = (
                 style={{
                     width: "auto",
                     aspectRatio: "1/1",
-                    padding: "20px"
                 }}
             >
                 <FlexBox
