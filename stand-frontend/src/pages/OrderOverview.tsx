@@ -2,8 +2,9 @@ import '@ui5/webcomponents-icons/dist/status-completed.js'
 import '@ui5/webcomponents-icons/dist/alert.js'
 import '@ui5/webcomponents-icons/dist/error.js'
 
-import { AnalyticalTable, Button, DateRangePicker, Icon, Input, Switch, TableDomRef, Text, Title, ToggleButton, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
-import { useState, useEffect, useRef } from 'react';
+import { AnalyticalTable, Button, DateRangePicker, Icon, Input, Switch, Text, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
+import { useState } from 'react';
+import { OrderPopOver } from "../components/OrderPopOver";
 
 const OrderOverview = () => {
 
@@ -104,6 +105,7 @@ const OrderOverview = () => {
                 <Switch checked={true}/>
                 <Button>Neu anlegen</Button>
             </Toolbar>
+
             <AnalyticalTable
                 globalFilterValue={searchValue}
                 columns={[
@@ -165,6 +167,14 @@ const OrderOverview = () => {
                 onRowClick={(instance: any) => console.log(instance.detail.row.values)}
             />
             </div>
+            <OrderPopOver
+                open = {true}
+                product={"Gummi"}
+                quantity={3}
+                unit={"Stück"}
+            >
+
+            </OrderPopOver>
         </>
     );
 
