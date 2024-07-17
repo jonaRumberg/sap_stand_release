@@ -3,39 +3,6 @@ import { useRef, useState} from "react"
 import "./ProductionList.css"
 
 const ProductionList = () => {
-    const [filteredProductionOrders, setFilteredProductionOrders] = useState([]);
-    const toast = useRef<ToastDomRef>(null);
-
-    const showToast = () => {
-        toast.current?.show();
-    };
-
-    const handleChange = (event) => {
-        const query = event.target.value.toLowerCase();
-        const tempOrders = [];
-
-        productionOrders.forEach(object => {
-            const valueString = getObjectValues(object).join().toLowerCase();
-            
-            if (valueString.includes(query)){
-                tempOrders.push(object);                
-            } 
-        });
-        setFilteredProductionOrders(tempOrders);
-    };
-
-    function getObjectValues(obj) {
-        let values = [];
-        for (let key in obj) {
-            if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
-                values = values.concat(getObjectValues(obj[key]));
-            } else {
-                values.push(obj[key]);
-            }
-        }
-        return values;
-    }
-
     const productionOrders = [
         {
             product: "Gummibärchen",
@@ -128,7 +95,43 @@ const ProductionList = () => {
             icon_design: "Critical"
         }
     ];
+
+    const [filteredProductionOrders, setFilteredProductionOrders] = useState(productionOrders);
+    const toast = useRef<ToastDomRef>(null);
+
+    const showToast = () => {
+        toast.current?.show();
+    };
+
+    const handleChange = (event) => {
+        const query = event.target.value.toLowerCase();
+        const tempOrders = [];
+
+        productionOrders.forEach(object => {
+            const valueString = getObjectValues(object).join().toLowerCase();
+            
+            if (valueString.includes(query)){
+                tempOrders.push(object);                
+            } 
+        });
+        setFilteredProductionOrders(tempOrders);
+    };
+
+    function getObjectValues(obj) {
+        let values = [];
+        for (let key in obj) {
+            if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+                values = values.concat(getObjectValues(obj[key]));
+            } else {
+                values.push(obj[key]);
+            }
+        }
+        return values;
+    }
+
     
+    
+
     return (
         <>
             <Page 
@@ -149,7 +152,7 @@ const ProductionList = () => {
                     <Input
                         icon={<Icon name="search" />}
                         onInput={handleChange}
-
+                        placeholder="Suchen..."
                         onSuggestionItemPreview={function _a(){}}
                         onSuggestionItemSelect={function _a(){}}
                         type="Text"
