@@ -6,7 +6,10 @@ import '@ui5/webcomponents-icons/dist/accounting-document-verification.js'
 import { FioriLikeCard } from '../components/FioriLikeCard';
 import { FlexBox, Title } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
+
 import { useState } from 'react';
+import { HeaderBar } from '../components/HeaderBar'
+
 
 const Launchpad = () => {
         
@@ -29,6 +32,12 @@ const Launchpad = () => {
                         height: "calc(100vh - 304px)",
                         }}
                     >
+                    <HeaderBar title={'Fiori Launchpad'} 
+                        quest={'Startseite'} 
+                        progressbar={false} 
+                        progress={0} >
+                            
+                        </HeaderBar>
                     <FlexBox direction='Column'
                         style={{
                         padding: "20px",
