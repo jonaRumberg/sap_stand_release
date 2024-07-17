@@ -2,8 +2,9 @@ import '@ui5/webcomponents-icons/dist/status-completed.js'
 import '@ui5/webcomponents-icons/dist/alert.js'
 import '@ui5/webcomponents-icons/dist/error.js'
 
-import { AnalyticalTable, Icon } from "@ui5/webcomponents-react";
+import { AnalyticalTable, Button, Icon } from "@ui5/webcomponents-react";
 import { useState, useEffect } from 'react';
+import { OrderPopOver } from "../components/OrderPopOver";
 
 const OrderOverview = () => {
 
@@ -36,7 +37,7 @@ const OrderOverview = () => {
      }
 
     return (
-        <>
+        <>  
             <AnalyticalTable
                 columns={[
                     {
@@ -78,9 +79,17 @@ const OrderOverview = () => {
                     },
                 ]}
                 data={data}
-                onRowClick={(instance: any) => console.log(instance.detail.row.values)}
-                
+                onRowClick={(instance: any) => console.log(instance.detail.row.values)} 
             />
+
+            <OrderPopOver
+                open = {true}
+                product={"Gummi"}
+                quantity={3}
+                unit={"Stück"}
+            >
+
+            </OrderPopOver>
 
         </>
     );
