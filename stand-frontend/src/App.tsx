@@ -29,16 +29,6 @@ function App() {
 
     return (
         <>
-            {/* <ShellBar
-                onLogoClick={() => window.location.replace("/") }
-                primaryTitle="SAP Ständ"
-            >
-                <ShellBarItem
-                    icon={cookies?.prefersDarkMode ? "light-mode" : "dark-mode"}
-                    text="Switch Dark Mode"
-                    onClick={handleDarkModeSwitch}
-                  />
-            </ShellBar> */}
             <Outlet />
         </>
     );

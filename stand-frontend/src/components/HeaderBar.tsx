@@ -48,6 +48,7 @@ export const HeaderBar = (
             >
             </ShellBar>
             <ProgressIndicator
+                style={{width: '50%', position: 'relative', left: '25%'}}
                 value={progress}
                 hidden={!progressbar}
                 valueState="Success"
