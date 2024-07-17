@@ -45,8 +45,8 @@ const CreateProductionOrder = () => {
   };
   const handleClose = (event) => {
     if (event.detail.action === MessageBoxActions.OK) {
-      
-    } 
+      // send message to Material ordering
+    }
     setOpen(false);
   };
 
@@ -55,7 +55,7 @@ const CreateProductionOrder = () => {
   const product = useRef(null);
   const production = useRef(null);
   const changeProduct = () => {
-    if (product.current.value != "Gummibärchen"){
+    if (product.current.value != "Gummibärchen") {
       toast.current.show();
       setDiasbled(true);
     } else {
@@ -64,7 +64,7 @@ const CreateProductionOrder = () => {
   }
 
   const productionLineChange = (event) => {
-    
+
   }
 
   const Material = [
@@ -112,7 +112,7 @@ const CreateProductionOrder = () => {
     },
   ]
 
-  
+
 
   return (
     <>
@@ -123,7 +123,7 @@ const CreateProductionOrder = () => {
         style={{
           height: "96vh"
         }}
-      > 
+      >
         <Form
           //backgroundDesign="Transparent"
           columnsL={1}
@@ -221,7 +221,7 @@ const CreateProductionOrder = () => {
       </Page>
       <MessageBox
         open={open}
-        
+
         onClose={handleClose}
         type="Confirm"
       >
