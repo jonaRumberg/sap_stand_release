@@ -2,43 +2,112 @@ import '@ui5/webcomponents-icons/dist/status-completed.js'
 import '@ui5/webcomponents-icons/dist/alert.js'
 import '@ui5/webcomponents-icons/dist/error.js'
 
-import { AnalyticalTable, Button, Icon } from "@ui5/webcomponents-react";
-import { useState, useEffect } from 'react';
+import { AnalyticalTable, Button, DateRangePicker, Icon, Input, Switch, Text, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
+import { useState } from 'react';
 import { OrderPopOver } from "../components/OrderPopOver";
 
 const OrderOverview = () => {
 
-    const [data, setData] = useState([]);
+    const [searchValue, setSearchValue] = useState("")
+    const [data, setData] = useState([
+{
+                        status: 0,
+                        date: '2024-03-15T00:00:00.000Z',
+                        type: 'Liter Glucosesirup',
+                        quant: 5,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-16T00:00:00.000Z',
+                        type: 'Plastikverpackung',
+                        quant: 10,
+                    },
+                    {
+                        status: 2,
+                        date: '2024-03-17T00:00:00.000Z',
+                        type: 'Farbiges Papier',
+                        quant: 15,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-18T00:00:00.000Z',
+                        type: 'Fass Öl',
+                        quant: 30,
+                    },
+                    {
+                        status: 2,
+                        date: '2024-03-19T00:00:00.000Z',
+                        type: 'Rolle Stoff',
+                        quant: 8,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-17T00:00:00.000Z',
+                        type: 'Farbiges Papier',
+                        quant: 15,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-20T00:00:00.000Z',
+                        type: 'Glasflasche',
+                        quant: 6,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-27T00:00:00.000Z',
+                        type: 'Farbiges Papier',
+                        quant: 5,
+                    }
 
-    const fetchData = async () => {
-        try {
-            const response = await fetch('http://localhost:4000/orders');
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const result = await response.json();
-            setData(result);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
-     useEffect(() => {
-        fetchData();
-    }, []);
+                ]);
 
      const eventSource = new EventSource('http://localhost:4000/events');
      eventSource.onmessage = (event) => {
         if(JSON.parse(event.data).message == "reload"){
-            fetchData();
+            setData(
+                [
+                    {
+                        status: 1,
+                        date: '18.12.2004',
+                        type: 'Glucose',
+                        quant: 2,
+                    }, ...data
+                ]);
         } else {
             console.log(JSON.parse(event.data))
         }
      }
 
     return (
-        <>  
+        <>
+            <div
+                style={{padding: "1em"}}
+            >
+            <Title style={{paddingBottom: "1em"}}>Einkaufsaufträge</Title>
+            <Toolbar>
+                <Text>Suche: </Text>
+                <Input
+                    placeholder='Suche'
+                    icon={<Icon name="search"/>}
+                    onChange={value => setSearchValue(value.target.value)}
+                />
+                <Text>Datum auswählen: </Text>
+                <DateRangePicker
+                    onChange={function _a(){}}
+                    onInput={function _a(){}}
+                    onValueStateChange={function _a(){}}
+                    primaryCalendarType="Gregorian"
+                    valueState="None"
+                    placeholder='Von - Bis'
+                />
+                <ToolbarSpacer/>
+                <Text>Zeige abgeschlossene Aufträge:</Text>
+                <Switch checked={true}/>
+                <Button>Neu anlegen</Button>
+            </Toolbar>
+
             <AnalyticalTable
+                globalFilterValue={searchValue}
                 columns={[
                     {
                         Header: 'Status',
@@ -63,7 +132,21 @@ const OrderOverview = () => {
 
                     {
                         Header: 'Datum',
-                        accessor: 'date'
+                        accessor: 'date',
+                        sortType: 'datetime',
+                        Cell: (instance: any) => {
+                            const d = new Date(Date.parse(instance.cell.value))
+                            return d.toISOString().slice(0,10)
+                        },
+                        
+                        filter(rows, _columnIds, _filterValue) {
+                            rows.forEach(row => {
+                                
+                                console.log(Date.parse(row.values.date))
+                            })
+
+                            return rows
+                        },
 
                     },
                     {
@@ -79,9 +162,11 @@ const OrderOverview = () => {
                     },
                 ]}
                 data={data}
-                onRowClick={(instance: any) => console.log(instance.detail.row.values)} 
+                filterable
+                
+                onRowClick={(instance: any) => console.log(instance.detail.row.values)}
             />
-
+            </div>
             <OrderPopOver
                 open = {true}
                 product={"Glucose"}
@@ -90,7 +175,6 @@ const OrderOverview = () => {
             >
 
             </OrderPopOver>
-
         </>
     );
 
