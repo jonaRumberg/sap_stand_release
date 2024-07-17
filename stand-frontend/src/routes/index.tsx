@@ -5,6 +5,7 @@ import Launchpad from "../pages/FLP";
 import CreateProductionOrder from "../pages/CreateProductionOrder"
 import ProductionList from "../pages/ProductionList";
 import InfoPageStudies from "../pages/InfoPageStudies";
+import OrderOverview from "../pages/OrderOverview";
 
 export const router = createBrowserRouter([
     {
@@ -15,8 +16,9 @@ export const router = createBrowserRouter([
             { path: "/results", element: <Launchpad /> },
             { path: "/createPO", element: <CreateProductionOrder /> },
             { path: "*", element: <Launchpad /> },
+            { path: "/orders", element: <OrderOverview/> },
+            { path: "/info", element: <InfoPageStudies/> }
             { path: "/productionList", element: <ProductionList /> },
-            { path: "/info", element: < InfoPageStudies/> }
         ]
     }
 ]);
