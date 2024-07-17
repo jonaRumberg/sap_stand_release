@@ -84,9 +84,9 @@ const OrderOverview = () => {
 
             <OrderPopOver
                 open = {true}
-                product={"Gummi"}
+                product={"Glucose"}
                 quantity={3}
-                unit={"Stück"}
+                unit={"ml"}
             >
 
             </OrderPopOver>

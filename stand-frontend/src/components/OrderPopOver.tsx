@@ -1,14 +1,13 @@
 import { Bar, Button, CheckBox, Dialog, FlexBox, Form, FormGroup, FormItem, Input, Label, Select, SelectDialog, SelectDomRef, StandardListItem, Table, TableCell, TableColumn, TableRow, TextArea, Title } from "@ui5/webcomponents-react"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
-export const OrderPopOver = (
-    {open, product, quantity, unit}: {open: boolean, product: string, quantity: int, unit: String}
-) => {
-    const dialog = useRef<SelectDomRef>(null);
-
-    const onSend = () => {
-        alert("Abgeschickt");
-    };
+export const OrderPopOver = ({open, product, quantity, unit}: {open: boolean, product: string, quantity: int, unit: String}) => 
+    {
+        const dialog = useRef<SelectDomRef>(null);
+        const [sendingDuration, setsendingDuration] = useState(0);
+        const onSend = () => {
+            setsendingDuration(6);
+        };
 
     return (
         <>
@@ -25,10 +24,8 @@ export const OrderPopOver = (
                     <Bar    
                         design="Footer" 
                         endContent={
-                            <Button 
-                                onClick={onSend}
-                            >
-                                Close
+                            <Button onClick={onSend} design="Emphasized">
+                                Bestellen
                             </Button>
                         }
                     />
@@ -41,12 +38,9 @@ export const OrderPopOver = (
             >
                 <Form
                     columnsL={2}
-                    columnsM={1}
-                    columnsS={1}
+                    columnsM={2}
+                    columnsS={2}
                     columnsXL={2}
-                    style={{
-                        alignItems: 'center'
-                    }}
                     >
                     <FormGroup titleText="Anfragedaten">
                         <FormItem label="Produkt">
@@ -66,44 +60,46 @@ export const OrderPopOver = (
                     
                     <FormGroup
                         titleText="Mögliche Lieferanten"
-                        
                         >
-                            <FlexBox
-                            style={{
-                                background:"black"
-                            }}>
                          <Table
+                            mode="SingleSelect"
                             style={{
-                                background:"black"
+                                width: '250%'
                             }}
                             columns={
-                            <>
-                                <TableColumn style={{
-                                width: '50rem'
-                            }}>
-                                    Lieferant
-                                </TableColumn>
-                                <TableColumn>
-                                    Preis pro {unit}
-                                </TableColumn>
-                                <TableColumn>
-                                    Verfügbar
-                                </TableColumn>
-                                <TableColumn>
-                                    Lieferdauer
-                                </TableColumn>
-                            </>
+                                <>
+                                    <TableColumn>Lieferant</TableColumn>
+                                    <TableColumn>Preis pro {unit}</TableColumn>
+                                    <TableColumn>Verfügbar</TableColumn>
+                                    <TableColumn>Lieferdauer</TableColumn>
+                                </>
                             }
-                            mode="MultiSelect"
-                            >
+                        >
                             <TableRow>
-                                <TableCell>Gummiwerke Fulda</TableCell>
+                                <TableCell>Glucosehof Meier</TableCell>
                                 <TableCell>5 €</TableCell>
-                                <TableCell>2 {unit}</TableCell>
-                                <TableCell>3 Tage</TableCell>
+                                <TableCell>200 {unit}</TableCell>
+                                <TableCell>15 Sekunden</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Glucose Glück Gießen</TableCell>
+                                <TableCell>4,50 €</TableCell>
+                                <TableCell>300 {unit}</TableCell>
+                                <TableCell>22 Sekunden</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Glucose Gold</TableCell>
+                                <TableCell>5,50 €</TableCell>
+                                <TableCell>800 {unit}</TableCell>
+                                <TableCell>10 Sekunden</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Gourmet Glucose</TableCell>
+                                <TableCell>6 €</TableCell>
+                                <TableCell>200 {unit}</TableCell>
+                                <TableCell>7 Sekunden</TableCell>
                             </TableRow>
                          </Table>
-                         </FlexBox>
                     </FormGroup>          
                 </Form>
             </Dialog>
