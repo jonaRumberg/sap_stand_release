@@ -44,7 +44,7 @@ const OrderOverview = () => {
                         Header: 'Status',
                         accessor: 'status',
                         width: 1,
-                        Cell: (instance) => {
+                        Cell: (instance: any) => {
                             let icon;
                             if(instance.cell.value == 0) {
                                 icon = <Icon name="status-completed" design='Positive'/>
