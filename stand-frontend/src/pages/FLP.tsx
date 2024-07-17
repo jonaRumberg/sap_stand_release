@@ -7,7 +7,7 @@ import { FioriLikeCard } from '../components/FioriLikeCard';
 import { FlexBox, Title } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HeaderBar } from '../components/HeaderBar'
 
 
@@ -18,10 +18,62 @@ const Launchpad = () => {
 
         const eventSource = new EventSource('http://localhost:4000/events');
         eventSource.onmessage = (event) => {
-            if(JSON.parse(event.data).message == "reload"){
+            if(JSON.parse(event.data).message == "place order"){
                 setNotificationVisible(true)
             } else {
-                console.log(JSON.parse(event.data))
+                console.log(JSON.parse(event.data).message)
+            }
+        }
+
+        const getOrderPlaced = async () => {
+            try {
+                const response = await fetch('http://localhost:4000/getOrderPlaced'); 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const result = await response.text();
+                console.log(result)
+                if(result == 'true'){
+                    setNotificationVisible(true)
+                } 
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+        useEffect(() => {
+            getOrderPlaced()
+        }, [])
+
+        const startSinglePlayer = async () => {
+            try {
+                const response = await fetch('http://localhost:4000/startSinglePlayer');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                navigate("/productionList")
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        const startGame = async () => {
+             try {
+                const response = await fetch('http://localhost:4000/gameStatus');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const result = await response.text();
+                if(result == 'none'){
+                    navigate("/gameStart")
+                }
+                if(result == 'running single'){
+                    startSinglePlayer()
+                }
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
         }
 
@@ -50,12 +102,15 @@ const Launchpad = () => {
                                 subtitle="Produziere Gummibären" 
                                 icon="begin"
                                 showNotify={false}
-                                callback={()=>alert("asdf")}
+                                callback={startGame}
                                 />
                             <FioriLikeCard 
                                 title='Einkauf' 
                                 subtitle="Verwalte Einkaufsaufträge" 
-                                callback={() => navigate("/orders")}
+                                callback={() => {
+                                    setNotificationVisible(false)
+                                    navigate("/orders")
+                                }}
                                 showNotify={notificationVisible}
                                 icon="accounting-document-verification"/>
                         </FlexBox>
@@ -65,7 +120,6 @@ const Launchpad = () => {
                                 title='Studiengänge' 
                                 subtitle="Entdecke Studiengänge" 
                                 callback={() => {
-                                    setNotificationVisible(false)
                                     navigate("/info")
                                 }}
                                 showNotify={false}

@@ -73,7 +73,7 @@ const CreateProductionOrder = () => {
 
   }
 
-  const Material = [
+  const materials = [
     {
       materialName: "Glukosesirup",
       available: matAvailable,
@@ -223,7 +223,7 @@ const CreateProductionOrder = () => {
                 }}
               >
                 {
-                  Material.map(i =>
+                  materials.map(i =>
                     <CustomListItem highlight={i.highlight} >
                       <FlexBox justifyContent="SpaceBetween" alignItems="Center" style={{ width: '100%' }}>
                         {i.materialName}
@@ -232,7 +232,7 @@ const CreateProductionOrder = () => {
                         <Button
                           disabled={i.buttonDisabled}
                           style={{ flex: "true", justifyContent: "flex-end" }}
-                        // onClick={}
+                          onClick={()=>fetch('http://localhost:4000/placeOrder')}
                         >
                           Bestellen
                         </Button>

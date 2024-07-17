@@ -3,14 +3,15 @@ import '@ui5/webcomponents-icons/dist/alert.js'
 import '@ui5/webcomponents-icons/dist/error.js'
 
 import { AnalyticalTable, Button, DateRangePicker, Icon, Input, Switch, Text, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { OrderPopOver } from "../components/OrderPopOver";
 
 const OrderOverview = () => {
     const [open, setOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
-    const [data, setData] = useState([
-{
+
+    const orders = [
+                    {
                         status: 0,
                         date: '2024-03-15T00:00:00.000Z',
                         type: 'Liter Glucosesirup',
@@ -59,24 +60,35 @@ const OrderOverview = () => {
                         quant: 5,
                     }
 
-                ]);
+                ]
+    const additionalOrder = {
+                               status: 1,
+                               date: '2024-03-20T00:00:00.000Z',
+                               type: 'Glucose',
+                               quant: 2,
+                            }
 
-     const eventSource = new EventSource('http://localhost:4000/events');
-     eventSource.onmessage = (event) => {
-        if(JSON.parse(event.data).message == "reload"){
-            setData(
-                [
-                    {
-                        status: 1,
-                        date: '18.12.2004',
-                        type: 'Glucose',
-                        quant: 2,
-                    }, ...data
-                ]);
+
+
+    const [orderOpen, setOrderOpen] = useState(false)
+    const [data, setData] = useState(orderOpen ? [additionalOrder, ...orders] : orders);
+    
+    useEffect(()=>{
+        if(orderOpen){
+            setData([additionalOrder, ...orders])
         } else {
-            console.log(JSON.parse(event.data))
+            setData(orders)
         }
-     }
+    },[orderOpen])
+
+    const eventSource = new EventSource('http://localhost:4000/events');
+    eventSource.onmessage = (event) => {
+       if(JSON.parse(event.data).message == "place order"){
+            setOrderOpen(true)
+       } else {
+           console.log(JSON.parse(event.data))
+       }
+    }
 
     return (
         <>
