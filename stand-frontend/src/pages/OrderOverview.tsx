@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { OrderPopOver } from "../components/OrderPopOver";
 
 const OrderOverview = () => {
-
+    const [open, setOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
     const [data, setData] = useState([
 {
@@ -103,7 +103,9 @@ const OrderOverview = () => {
                 <ToolbarSpacer/>
                 <Text>Zeige abgeschlossene Aufträge:</Text>
                 <Switch checked={true}/>
-                <Button>Neu anlegen</Button>
+                <Button
+                    onClick={()=>setOpen(true)}
+                    >Neu anlegen</Button>
             </Toolbar>
 
             <AnalyticalTable
@@ -168,12 +170,12 @@ const OrderOverview = () => {
             />
             </div>
             <OrderPopOver
-                open = {true}
+                open = {open}
                 product={"Glucose"}
                 quantity={3}
                 unit={"ml"}
+                onClose={()=>setOpen(false)}
             >
-
             </OrderPopOver>
         </>
     );

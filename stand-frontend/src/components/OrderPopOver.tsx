@@ -1,13 +1,13 @@
-import { Bar, Button, CheckBox, Dialog, FlexBox, Form, FormGroup, FormItem, Input, Label, Select, SelectDialog, SelectDomRef, StandardListItem, Table, TableCell, TableColumn, TableRow, TextArea, Title } from "@ui5/webcomponents-react"
-import { useRef, useState } from "react"
+import { Bar, Button, CheckBox, Dialog, FlexBox, Form, FormGroup, FormItem, Input, Label, Select, SelectDialog, SelectDomRef, StandardListItem, Table, TableCell, TableColumn, TableDomRef, TableRow, TextArea, Title } from "@ui5/webcomponents-react"
+import { Children, useRef, useState } from "react"
 
-export const OrderPopOver = ({open, product, quantity, unit}: {open: boolean, product: string, quantity: int, unit: String}) => 
+export const OrderPopOver = ({open, product, quantity, unit, onClose}: {open: boolean, product: string, quantity: int, unit: String, onClose: () => void}) => 
     {
         const dialog = useRef<SelectDomRef>(null);
-        const [sendingDuration, setsendingDuration] = useState(0);
+
         const onSend = () => {
-            setsendingDuration(6);
-        };
+            onClose();
+        }
 
     return (
         <>
