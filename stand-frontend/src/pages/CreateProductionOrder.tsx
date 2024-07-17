@@ -1,10 +1,7 @@
 import {
   CustomListItem,
-
-  Page,
   Bar,
   Button,
-
   Form,
   FormGroup,
   FormItem,
@@ -14,21 +11,15 @@ import {
   CheckBox,
   Label,
   FlexBox,
-
   List,
   MessageBox,
   DateTimePicker,
-  ComboBoxItem,
-  ComboBox,
-  Icon,
   Toast,
   MessageBoxActions,
   ObjectPage,
   DynamicPageHeader,
   DynamicPageTitle,
-  ObjectPageSection,
-  MessageStrip,
-  ObjectStatus
+
 } from "@ui5/webcomponents-react"
 import { useRef, useState } from "react";
 
@@ -73,7 +64,8 @@ const CreateProductionOrder = () => {
     error.current.show();
   }
 
-  const productionLineChange = (event) => {
+  const productionLine = useRef(null);
+  const changeProductionLine = () => {
 
   }
 
@@ -273,7 +265,7 @@ const CreateProductionOrder = () => {
               />
             </FormItem>
             <FormItem label="Produktionslinie:">
-              <Select>
+              <Select ref={productionLine} onChange={changeProductionLine} >
                 <Option>Linie 1</Option>
                 <Option>Linie 2</Option>
                 <Option>Linie 3</Option>
