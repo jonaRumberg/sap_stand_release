@@ -1,12 +1,13 @@
 import { Card, CardHeader, FlexBox, Icon } from "@ui5/webcomponents-react"
 
 export const FioriLikeCard = (
-    { title, subtitle, icon, callback }: {title: string, subtitle: string, icon: string, callback: () => void},
+    { title, subtitle, icon, callback }: {title: string, subtitle: string, icon: string, callback: () => void },
 ) => {
     return (
         <>
             <Card
                 onClick={callback}
+                
                 header={
                     <CardHeader
                         titleText={title}

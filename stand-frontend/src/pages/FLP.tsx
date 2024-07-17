@@ -6,10 +6,21 @@ import '@ui5/webcomponents-icons/dist/accounting-document-verification.js'
 import { FioriLikeCard } from '../components/FioriLikeCard';
 import { FlexBox, Title } from '@ui5/webcomponents-react';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const Launchpad = () => {
         
         const navigate = useNavigate()
+        const [notificationVisible, setNotificationVisible] = useState(false)
+
+        const eventSource = new EventSource('http://localhost:4000/events');
+        eventSource.onmessage = (event) => {
+            if(JSON.parse(event.data).message == "reload"){
+                //display notification
+            } else {
+                console.log(JSON.parse(event.data))
+            }
+        }
 
         return (
                 <>

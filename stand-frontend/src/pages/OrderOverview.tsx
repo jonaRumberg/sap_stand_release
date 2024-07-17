@@ -3,8 +3,37 @@ import '@ui5/webcomponents-icons/dist/alert.js'
 import '@ui5/webcomponents-icons/dist/error.js'
 
 import { AnalyticalTable, Icon } from "@ui5/webcomponents-react";
+import { useState, useEffect } from 'react';
 
 const OrderOverview = () => {
+
+    const [data, setData] = useState([]);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:4000/orders');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const result = await response.json();
+            setData(result);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+     useEffect(() => {
+        fetchData();
+    }, []);
+
+     const eventSource = new EventSource('http://localhost:4000/events');
+     eventSource.onmessage = (event) => {
+        if(JSON.parse(event.data).message == "reload"){
+            fetchData();
+        } else {
+            console.log(JSON.parse(event.data))
+        }
+     }
 
     return (
         <>
@@ -48,27 +77,7 @@ const OrderOverview = () => {
 
                     },
                 ]}
-                data={[
-                    {
-                        status: 0,
-                        date: '18.12.2004',
-                        type: 'Glucose',
-                        quant: 2,
-                    },
-                    {
-                        status: 1,
-                        date: '18.12.2004',
-                        type: 'Glucose',
-                        quant: 4,
-                    },
-                    {
-                        status: 2,
-                        date: '18.12.2004',
-                        type: 'Glucose',
-                        quant: 4,
-                    }
-
-                ]}
+                data={data}
                 onRowClick={(instance: any) => console.log(instance.detail.row.values)}
                 
             />
