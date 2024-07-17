@@ -123,7 +123,22 @@ const CreateProductionOrder = () => {
   return (
     <>
       <ObjectPage
-        footer={<Bar design="FloatingFooter" endContent={<><Button design="Positive">Accept</Button><Button design="Negative">Reject</Button></>} />}
+        footer={
+           <Bar design="FloatingFooter"
+           endContent={<>
+              <Button ref={production} 
+              disabled={disabled} 
+              design="Emphasized" 
+              onClick={onButtonClick}>
+              Jetzt produzieren
+              </Button> 
+              <Button design="Transparent">
+                Später einplanen
+              </Button>
+              <Button design="Transparent">
+                Cancel
+              </Button></>}>
+              </Bar>}
         headerContent={<DynamicPageHeader></DynamicPageHeader>}
         headerTitle={<DynamicPageTitle header="Produktionsauftrag anlegen"></DynamicPageTitle>}
         imageShapeCircle
