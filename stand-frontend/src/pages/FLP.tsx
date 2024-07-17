@@ -22,6 +22,7 @@ const Launchpad = () => {
                         quest={'Startseite'} 
                         progressbar={false} 
                         progress={0} >
+                            
                         </HeaderBar>
                     <FlexBox direction='Column'
                         style={{

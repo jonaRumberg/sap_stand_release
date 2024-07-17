@@ -1,6 +1,5 @@
 import {
     ShellBar,
-    StandardListItem,
     Input,
     Avatar,
     Icon,
@@ -34,7 +33,7 @@ export const HeaderBar = (
         <>
             <ShellBar
                 logo={<img alt="SAP Logo" src="https://sap.github.io/ui5-webcomponents/images/sap-logo-svg.svg" />}
-                menuItems={<><StandardListItem data-key="1">Home</StandardListItem></>}
+                // menuItems={<><StandardListItem data-key="1">Home</StandardListItem></>}
                 notificationsCount="0"
                 onLogoClick={navigateToHome}
                 onMenuItemClick={navigateToHome}
