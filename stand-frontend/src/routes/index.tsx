@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
             { path: "/createPO", element: <CreateProductionOrder /> },
             { path: "*", element: <Launchpad /> },
             { path: "/orders", element: <OrderOverview/> },
-            { path: "/info", element: <InfoPageStudies/> }
+            { path: "/info", element: <InfoPageStudies/> },
             { path: "/productionList", element: <ProductionList /> },
         ]
     }
