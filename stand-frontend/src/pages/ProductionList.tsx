@@ -1,6 +1,6 @@
 import {List, Page, StandardListItem, Button, Bar, Toast, ToastDomRef, Label, Title, Table, CustomListItem, Text, Icon, FlexBox, Input } from "@ui5/webcomponents-react";
 import { useRef, useState} from "react"
-import "./ProductionList.css"
+import { useNavigate } from 'react-router-dom'
 
 const ProductionList = () => {
     const productionOrders = [
@@ -98,6 +98,7 @@ const ProductionList = () => {
 
     const [filteredProductionOrders, setFilteredProductionOrders] = useState(productionOrders);
     const toast = useRef<ToastDomRef>(null);
+    const navigate = useNavigate();
 
     const showToast = () => {
         toast.current?.show();
@@ -144,7 +145,10 @@ const ProductionList = () => {
                             Produktionsauftrag ({filteredProductionOrders.length})
                         </Title>}
                     endContent={
-                        <Button>
+                        <Button 
+                            design="Emphasized"
+                            onClick={() => navigate("/CreatePO")}
+                        >
                             Anlegen
                         </Button>
                     }
@@ -176,11 +180,11 @@ const ProductionList = () => {
                             >
                                 <FlexBox justifyContent="SpaceBetween" alignItems="Center" style={{width: '100%'}} >
                                     <div style={{display: "flex"}}>
-                                        <Icon name={i.icon_name} className="ListColumn" design={i.icon_design}/>
-                                        <Title level="H5" className="ListColumn" style={{width:"200px"}}>
+                                        <Icon name={i.icon_name} style={{marginRight: "32px"}} design={i.icon_design}/>
+                                        <Title level="H5" style={{width:"200px", marginRight: "32px"}}>
                                             {i.product}
                                         </Title>
-                                        <div className="ListColumn">
+                                        <div style={{marginRight: "32px"}}>
                                             {i.color} <br/>
                                             {i.quantity} Stück <br/>
                                             {i.plant}, Linie {i.lane}
