@@ -16,7 +16,7 @@ const Launchpad = () => {
         const eventSource = new EventSource('http://localhost:4000/events');
         eventSource.onmessage = (event) => {
             if(JSON.parse(event.data).message == "reload"){
-                //display notification
+                setNotificationVisible(true)
             } else {
                 console.log(JSON.parse(event.data))
             }
@@ -40,12 +40,14 @@ const Launchpad = () => {
                                 title='Produktionsplanung' 
                                 subtitle="Produziere Gummibären" 
                                 icon="begin"
+                                showNotify={false}
                                 callback={()=>alert("asdf")}
                                 />
                             <FioriLikeCard 
                                 title='Einkauf' 
                                 subtitle="Verwalte Einkaufsaufträge" 
                                 callback={() => navigate("/orders")}
+                                showNotify={notificationVisible}
                                 icon="accounting-document-verification"/>
                         </FlexBox>
                         <Title level='H3'>Information</Title>
@@ -53,7 +55,11 @@ const Launchpad = () => {
                             <FioriLikeCard 
                                 title='Studiengänge' 
                                 subtitle="Entdecke Studiengänge" 
-                                callback={() => navigate("/info")}
+                                callback={() => {
+                                    setNotificationVisible(false)
+                                    navigate("/info")
+                                }}
+                                showNotify={false}
                                 icon="opportunity"/>
                         </FlexBox>
                     </FlexBox>
