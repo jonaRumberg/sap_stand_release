@@ -22,7 +22,13 @@ import {
   ComboBox,
   Icon,
   Toast,
-  MessageBoxActions
+  MessageBoxActions,
+  ObjectPage,
+  DynamicPageHeader,
+  DynamicPageTitle,
+  ObjectPageSection,
+  MessageStrip,
+  ObjectStatus
 } from "@ui5/webcomponents-react"
 import { useRef, useState } from "react";
 
@@ -116,32 +122,24 @@ const CreateProductionOrder = () => {
 
   return (
     <>
-      <Page
-        backgroundDesign="Solid"
-        footer={<Bar design="FloatingFooter" endContent={<><Button ref={production} disabled={disabled} design="Emphasized" onClick={onButtonClick}>Jetzt produzieren</Button> <Button design="Transparent">Später einplanen</Button><Button design="Transparent">Cancel</Button></>} />}
-        header={<Bar design="Header" />}
+      <ObjectPage
+        footer={<Bar design="FloatingFooter" endContent={<><Button design="Positive">Accept</Button><Button design="Negative">Reject</Button></>} />}
+        headerContent={<DynamicPageHeader></DynamicPageHeader>}
+        headerTitle={<DynamicPageTitle header="Produktionsauftrag anlegen"></DynamicPageTitle>}
+        imageShapeCircle
+        selectedSectionId="Auftragsdetails"
         style={{
-          height: "96vh"
+          height: 'calc(100vh - 55px)'
         }}
       >
         <Form
-          //backgroundDesign="Transparent"
           columnsL={1}
           columnsM={1}
           columnsS={1}
-          columnsXL={2}
-
-          labelSpanL={4}
-          labelSpanM={2}
-          labelSpanS={12}
-          labelSpanXL={4}
-          style={{
-            alignItems: 'center',
-            height: "100vh"
-          }}
-          titleText="Produktionsauftrag anlegen"
+          columnsXL={1}
+          titleText="Auftragsdetails"
         >
-          <FormGroup titleText="Auftragsdetails">
+          <FormGroup>
             <FormItem label="Produkt">
               <Select ref={product} onChange={changeProduct}>
                 <Option>Gummibärchen</Option>
@@ -166,8 +164,15 @@ const CreateProductionOrder = () => {
               <CheckBox checked />
             </FormItem>
           </FormGroup>
+        </Form>
 
-          <FormGroup titleText="Produktionswerk">
+        <Form
+          columnsL={1}
+          columnsM={1}
+          columnsS={1}
+          columnsXL={1}
+          titleText="Produktionswerk">
+          <FormGroup >
             <FormItem label="Werk ID">
               <Input type="Number" readonly value="1010" />
             </FormItem>
@@ -184,8 +189,15 @@ const CreateProductionOrder = () => {
               <Input type="Text" readonly value="Walldorf" />
             </FormItem>
           </FormGroup>
+        </Form>
 
-          <FormGroup titleText="Materialverfügbarkeit">
+        <Form
+          columnsL={1}
+          columnsM={1}
+          columnsS={1}
+          columnsXL={1}
+          titleText="Materialverfügbarkeit">
+          <FormGroup>
             <FormItem>
               <List
                 growing="None"
@@ -218,7 +230,7 @@ const CreateProductionOrder = () => {
             </FormItem>
           </FormGroup>
         </Form>
-      </Page>
+      </ObjectPage>
       <MessageBox
         open={open}
 
