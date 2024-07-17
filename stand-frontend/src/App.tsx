@@ -29,7 +29,7 @@ function App() {
 
     return (
         <>
-            <ShellBar
+            {/* <ShellBar
                 onLogoClick={() => window.location.replace("/") }
                 primaryTitle="SAP Ständ"
             >
@@ -38,7 +38,7 @@ function App() {
                     text="Switch Dark Mode"
                     onClick={handleDarkModeSwitch}
                   />
-            </ShellBar>
+            </ShellBar> */}
             <Outlet />
         </>
     );
