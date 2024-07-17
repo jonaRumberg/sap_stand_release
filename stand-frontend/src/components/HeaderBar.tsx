@@ -1,17 +1,34 @@
 import {
     ShellBar,
-    ShellBarItem,
     StandardListItem,
     Input,
     Avatar,
     Icon,
-    ProgressIndicator
+    ProgressIndicator,
+    Toast,
+    ToastDomRef
 } from '@ui5/webcomponents-react';
-import { useState } from 'react';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router';
 
 export const HeaderBar = (
     { title, quest, progressbar, progress }: { title: string, quest: string, progressbar: boolean, progress: number },
 ) => {
+
+    const navigate = useNavigate()
+    const navigateToHome = () => {
+        navigate("/");
+    }
+
+    const NotificationToast = useRef<ToastDomRef>(null);
+    const showNotification = () => {
+        NotificationToast.current?.show();
+    };
+
+    const JouleToast = useRef<ToastDomRef>(null);
+    const showJoule = () => {
+        JouleToast.current?.show();
+    };
 
     return (
         <>
@@ -19,13 +36,10 @@ export const HeaderBar = (
                 logo={<img alt="SAP Logo" src="https://sap.github.io/ui5-webcomponents/images/sap-logo-svg.svg" />}
                 menuItems={<><StandardListItem data-key="1">Home</StandardListItem></>}
                 notificationsCount="0"
-                onCoPilotClick={function _a() { }}
-                onLogoClick={function _a() { }}
-                onMenuItemClick={function _a() { }}
-                onNotificationsClick={function _a() { }}
-                onProductSwitchClick={function _a() { }}
-                onProfileClick={function _a() { }}
-                onSearchButtonClick={function _a() { }}
+                onLogoClick={navigateToHome}
+                onMenuItemClick={navigateToHome}
+                onNotificationsClick={showNotification}
+                onJouleClick={showJoule}
                 primaryTitle={title}
                 profile={<Avatar><img src="https://sap.github.io/ui5-webcomponents-react/assets/Person-B7wHqdJw.png" /></Avatar>}
                 searchField={<Input icon={<Icon interactive name="search" />} showClearIcon />}
@@ -40,6 +54,16 @@ export const HeaderBar = (
                 valueState="Success"
                 hideValue
             />
+            <Toast
+                ref={NotificationToast}
+                placement="BottomCenter">
+                Aktuell gibt es keine Nachrichten!
+            </Toast>
+            <Toast
+                ref={JouleToast}
+                placement="BottomCenter">
+                Bald verfügbar!
+            </Toast>
         </>
     )
 }

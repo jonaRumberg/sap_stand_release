@@ -18,7 +18,11 @@ const Launchpad = () => {
                         height: "calc(100vh - 304px)",
                         }}
                     >
-                    <HeaderBar title={'Fiori Launchpad'} quest={'Startseite'} progressbar={false} progress={0} ></HeaderBar>
+                    <HeaderBar title={'Fiori Launchpad'} 
+                        quest={'Startseite'} 
+                        progressbar={false} 
+                        progress={0} >
+                        </HeaderBar>
                     <FlexBox direction='Column'
                         style={{
                         padding: "20px",
