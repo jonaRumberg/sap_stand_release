@@ -1,6 +1,10 @@
-body {
+.whiteFont{
+  color:white;
+}
+
+.body {
     background: 
-      linear-gradient(#000000, #000000),
+      linear-gradient(#0004, #0000),
       #123;
     margin: 0;
     height: 100vh;
