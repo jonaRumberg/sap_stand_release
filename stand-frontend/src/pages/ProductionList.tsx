@@ -1,6 +1,7 @@
-import {List, Page, Button, Bar, Toast, ToastDomRef, Title, CustomListItem, Icon, FlexBox, Input } from "@ui5/webcomponents-react";
-import { useRef, useState} from "react"
+import { List, Page, Button, Bar, Toast, ToastDomRef, Title, CustomListItem, Icon, FlexBox, Input } from "@ui5/webcomponents-react";
+import { useRef, useState } from "react"
 import { useNavigate } from 'react-router-dom'
+import { HeaderBar } from "../components/HeaderBar";
 
 const ProductionList = () => {
     const productionOrders = [
@@ -110,10 +111,10 @@ const ProductionList = () => {
 
         productionOrders.forEach(object => {
             const valueString = getObjectValues(object).join().toLowerCase();
-            
-            if (valueString.includes(query)){
-                tempOrders.push(object);                
-            } 
+
+            if (valueString.includes(query)) {
+                tempOrders.push(object);
+            }
         });
         setFilteredProductionOrders(tempOrders);
     };
@@ -130,13 +131,18 @@ const ProductionList = () => {
         return values;
     }
 
-    
-    
+
+
 
     return (
         <>
-            <Page 
-                style={{height:"96vh"}}
+            <HeaderBar title={'Produktionsauftrag anlegen'}
+                quest={'Lege einen neuen Produktionsauftrag an'}
+                progressbar={true}
+                progress={10} >
+            </HeaderBar>
+            <Page
+                style={{ height: "96vh" }}
             >
                 <Bar
                     design="Header"
@@ -145,25 +151,25 @@ const ProductionList = () => {
                             Produktionsauftrag ({filteredProductionOrders.length})
                         </Title>}
                     endContent={
-                        <Button 
+                        <Button
                             design="Emphasized"
                             onClick={() => navigate("/CreatePO")}
                         >
                             Anlegen
                         </Button>
                     }
-                    >
+                >
                     <Input
                         icon={<Icon name="search" />}
                         onInput={handleChange}
                         placeholder="Suchen..."
-                        onSuggestionItemPreview={function _a(){}}
-                        onSuggestionItemSelect={function _a(){}}
+                        onSuggestionItemPreview={function _a() { }}
+                        onSuggestionItemSelect={function _a() { }}
                         type="Text"
                         valueState="None"
                     />
                 </Bar>
-                
+
                 <List
                     growing="Scroll"
                     mode="None"
@@ -171,26 +177,26 @@ const ProductionList = () => {
                     separators="All"
                 >
                     {
-                        filteredProductionOrders.map(i => 
+                        filteredProductionOrders.map(i =>
                             <CustomListItem
                                 style={{
-                                    height:"fit-content", 
+                                    height: "fit-content",
                                     padding: "8px"
                                 }}
                             >
-                                <FlexBox justifyContent="SpaceBetween" alignItems="Center" style={{width: '100%'}} >
-                                    <div style={{display: "flex"}}>
-                                        <Icon name={i.icon_name} style={{marginRight: "32px"}} design={i.icon_design}/>
-                                        <Title level="H5" style={{width:"200px", marginRight: "32px"}}>
+                                <FlexBox justifyContent="SpaceBetween" alignItems="Center" style={{ width: '100%' }} >
+                                    <div style={{ display: "flex" }}>
+                                        <Icon name={i.icon_name} style={{ marginRight: "32px" }} design={i.icon_design} />
+                                        <Title level="H5" style={{ width: "200px", marginRight: "32px" }}>
                                             {i.product}
                                         </Title>
-                                        <div style={{marginRight: "32px"}}>
-                                            {i.color} <br/>
-                                            {i.quantity} Stück <br/>
+                                        <div style={{ marginRight: "32px" }}>
+                                            {i.color} <br />
+                                            {i.quantity} Stück <br />
                                             {i.plant}, Linie {i.lane}
                                         </div>
                                     </div>
-                                    <Icon name="navigation-right-arrow"/>
+                                    <Icon name="navigation-right-arrow" />
                                 </FlexBox>
                             </CustomListItem>
                         )
@@ -204,11 +210,11 @@ const ProductionList = () => {
                     Tipp: Lege einen neuen Produktionsauftrag an.
                 </Toast>
 
-                
+
             </Page>
         </>
 
-        
+
     )
 };
 

@@ -9,7 +9,7 @@ const SuccessPage = () => {
         <HeaderBar 
             title={'Fiori Launchpad'} 
             quest={'Startseite'} 
-            progressbar={false} 
+            progressbar={true} 
             progress={100} />
         
         <FlexBox

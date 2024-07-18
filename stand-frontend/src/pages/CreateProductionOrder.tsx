@@ -22,6 +22,7 @@ import {
 
 } from "@ui5/webcomponents-react"
 import { useRef, useState } from "react";
+import { HeaderBar } from "../components/HeaderBar";
 
 
 const CreateProductionOrder = () => {
@@ -55,7 +56,7 @@ const CreateProductionOrder = () => {
     if (product.current.value != "Gummibärchen") {
       toast.current.show();
       setDiasbled(true);
-      
+
     } else {
       setDiasbled(false);
     }
@@ -119,6 +120,11 @@ const CreateProductionOrder = () => {
 
   return (
     <>
+      <HeaderBar title={'Produktionsauftrag anlegen'}
+        quest={'Lege einen Produktionsauftrag für gemsichte Gummibärchen an'}
+        progressbar={true}
+        progress={30} >
+      </HeaderBar>
       <ObjectPage
         footer={
           <Bar design="FloatingFooter"
@@ -143,7 +149,7 @@ const CreateProductionOrder = () => {
         imageShapeCircle
         selectedSectionId="Auftragsdetails"
         style={{
-          height: 'calc(100vh - 55px)'
+          height: 'calc(100vh - 90px)'
         }}
       >
         <Form
