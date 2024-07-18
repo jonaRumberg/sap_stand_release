@@ -6,6 +6,7 @@ import CreateProductionOrder from "../pages/CreateProductionOrder"
 import ProductionList from "../pages/ProductionList";
 import InfoPageStudies from "../pages/InfoPageStudies";
 import OrderOverview from "../pages/OrderOverview";
+import SuccessPage from "../pages/SuccessPage";
 
 export const router = createBrowserRouter([
     {
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
             { path: "/orders", element: <OrderOverview/> },
             { path: "/info", element: <InfoPageStudies/> },
             { path: "/productionList", element: <ProductionList /> },
+            { path: "/SuccessPage", element: <SuccessPage /> }
         ]
     }
 ]);
