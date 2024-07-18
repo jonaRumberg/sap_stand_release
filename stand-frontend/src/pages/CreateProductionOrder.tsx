@@ -22,7 +22,11 @@ import {
 
 } from "@ui5/webcomponents-react"
 import { useRef, useState } from "react";
+
 import { HeaderBar } from "../components/HeaderBar";
+
+import { useNavigate } from "react-router";
+
 
 
 const CreateProductionOrder = () => {
@@ -41,11 +45,32 @@ const CreateProductionOrder = () => {
   const onButtonClick = () => {
     setOpen(true);
   };
-  const handleClose = (event) => {
+
+  const navigate = useNavigate()
+
+  const handleClose = async (event) => {
     if (event.detail.action === MessageBoxActions.OK) {
       // send message to Material ordering
+
     }
-    setOpen(false);
+    //get oder status
+    try {
+        const response = await fetch('http://localhost:4000/getFinishOrder'); 
+        console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        const result = await response.text();
+        console.log(result)
+            if(result == 'true'){
+                await fetch('http://localhost:4000/endGame');
+                setOpen(false)
+                navigate("/successPage")
+            } 
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
   };
 
   const [disabled, setDiasbled] = useState(false)
@@ -71,7 +96,7 @@ const CreateProductionOrder = () => {
 
   }
 
-  const Material = [
+  const materials = [
     {
       materialName: "Glukosesirup",
       available: matAvailable,
@@ -225,7 +250,7 @@ const CreateProductionOrder = () => {
                 }}
               >
                 {
-                  Material.map(i =>
+                  materials.map(i =>
                     <CustomListItem highlight={i.highlight} >
                       <FlexBox justifyContent="SpaceBetween" alignItems="Center" style={{ width: '100%' }}>
                         {i.materialName}
@@ -234,7 +259,7 @@ const CreateProductionOrder = () => {
                         <Button
                           disabled={i.buttonDisabled}
                           style={{ flex: "true", justifyContent: "flex-end" }}
-                        // onClick={}
+                          onClick={()=>fetch('http://localhost:4000/placeOrder')}
                         >
                           Bestellen
                         </Button>

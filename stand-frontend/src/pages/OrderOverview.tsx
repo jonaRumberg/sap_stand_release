@@ -3,81 +3,127 @@ import '@ui5/webcomponents-icons/dist/alert.js'
 import '@ui5/webcomponents-icons/dist/error.js'
 
 import { AnalyticalTable, Button, DateRangePicker, Icon, Input, Switch, Text, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { OrderPopOver } from "../components/OrderPopOver";
 import { HeaderBar } from '../components/HeaderBar';
+import { useLocation } from 'react-router-dom';
+
 
 const OrderOverview = () => {
     const [open, setOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
-    const [data, setData] = useState([
-        {
-            status: 0,
-            date: '2024-03-15T00:00:00.000Z',
-            type: 'Liter Glucosesirup',
-            quant: 5,
-        },
-        {
-            status: 0,
-            date: '2024-03-16T00:00:00.000Z',
-            type: 'Plastikverpackung',
-            quant: 10,
-        },
-        {
-            status: 2,
-            date: '2024-03-17T00:00:00.000Z',
-            type: 'Farbiges Papier',
-            quant: 15,
-        },
-        {
-            status: 0,
-            date: '2024-03-18T00:00:00.000Z',
-            type: 'Fass Öl',
-            quant: 30,
-        },
-        {
-            status: 2,
-            date: '2024-03-19T00:00:00.000Z',
-            type: 'Rolle Stoff',
-            quant: 8,
-        },
-        {
-            status: 0,
-            date: '2024-03-17T00:00:00.000Z',
-            type: 'Farbiges Papier',
-            quant: 15,
-        },
-        {
-            status: 0,
-            date: '2024-03-20T00:00:00.000Z',
-            type: 'Glasflasche',
-            quant: 6,
-        },
-        {
-            status: 0,
-            date: '2024-03-27T00:00:00.000Z',
-            type: 'Farbiges Papier',
-            quant: 5,
-        }
 
-    ]);
 
-    const eventSource = new EventSource('http://localhost:4000/events');
-    eventSource.onmessage = (event) => {
-        if (JSON.parse(event.data).message == "reload") {
-            setData(
-                [
+    const orders = [
                     {
-                        status: 1,
-                        date: '18.12.2004',
-                        type: 'Glucose',
-                        quant: 2,
-                    }, ...data
-                ]);
-        } else {
-            console.log(JSON.parse(event.data))
+                        status: 0,
+                        date: '2024-03-15T00:00:00.000Z',
+                        type: 'Liter Glucosesirup',
+                        quant: 5,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-16T00:00:00.000Z',
+                        type: 'Plastikverpackung',
+                        quant: 10,
+                    },
+                    {
+                        status: 2,
+                        date: '2024-03-17T00:00:00.000Z',
+                        type: 'Farbiges Papier',
+                        quant: 15,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-18T00:00:00.000Z',
+                        type: 'Fass Öl',
+                        quant: 30,
+                    },
+                    {
+                        status: 2,
+                        date: '2024-03-19T00:00:00.000Z',
+                        type: 'Rolle Stoff',
+                        quant: 8,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-17T00:00:00.000Z',
+                        type: 'Farbiges Papier',
+                        quant: 15,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-20T00:00:00.000Z',
+                        type: 'Glasflasche',
+                        quant: 6,
+                    },
+                    {
+                        status: 0,
+                        date: '2024-03-27T00:00:00.000Z',
+                        type: 'Farbiges Papier',
+                        quant: 5,
+                    }
+
+                ]
+    const additionalOrder = {
+                               status: 1,
+                               date: '2024-03-20T00:00:00.000Z',
+                               type: 'Glucose',
+                               quant: 2,
+                            }
+
+
+
+    const [orderOpen, setOrderOpen] = useState(false)
+    const [data, setData] = useState(orderOpen ? [additionalOrder, ...orders] : orders);
+    const location = useLocation()
+
+    const getOrderPlaced = async () => {
+        
+        try {
+            const response = await fetch('http://localhost:4000/getOrderPlaced'); 
+            console.log(response)
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            const result = await response.text();
+            console.log(result)
+                if(result == 'true'){
+                    setOrderOpen(true)
+                } 
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
     }
+    useEffect(() => {
+        getOrderPlaced()
+            }, [location])
+    
+    useEffect(()=>{
+        console.log("changing data. Order open: ", orderOpen)
+        if(orderOpen){
+            setData([additionalOrder, ...orders])
+
+        } else {
+            setData(orders)
+        }
+
+    },[orderOpen])
+
+    // let eventSource: EventSource;
+    // setTimeout(() => {
+    //
+    //     eventSource = new EventSource('http://localhost:4000/events');
+    //     eventSource.onmessage = (event) => {
+    //        if(JSON.parse(event.data).message == "place order"){
+    //             setOrderOpen(true)
+    //        } else {
+    //            console.log(JSON.parse(event.data))
+    //        }
+    //     }
+    //
+    // }, 2000)
 
     return (
         <>
@@ -89,30 +135,27 @@ const OrderOverview = () => {
             <div
                 style={{ padding: "1em" }}
             >
-                <Title style={{ paddingBottom: "1em" }}>Einkaufsaufträge</Title>
-                <Toolbar>
-                    <Text>Suche: </Text>
-                    <Input
-                        placeholder='Suche'
-                        icon={<Icon name="search" />}
-                        onChange={value => setSearchValue(value.target.value)}
-                    />
-                    <Text>Datum auswählen: </Text>
-                    <DateRangePicker
-                        onChange={function _a() { }}
-                        onInput={function _a() { }}
-                        onValueStateChange={function _a() { }}
-                        primaryCalendarType="Gregorian"
-                        valueState="None"
-                        placeholder='Von - Bis'
-                    />
-                    <ToolbarSpacer />
-                    <Text>Zeige abgeschlossene Aufträge:</Text>
-                    <Switch checked={true} />
-                    <Button
-                        onClick={() => setOpen(true)}
-                    >Neu anlegen</Button>
-                </Toolbar>
+            <Title style={{paddingBottom: "1em"}}>Einkaufsaufträge</Title>
+            <Toolbar>
+                <Text>Suche: </Text>
+                <Input
+                    placeholder='Suche'
+                    icon={<Icon name="search"/>}
+                    onChange={value => setSearchValue(value.target.value)}
+                />
+                <Text>Datum auswählen: </Text>
+                <DateRangePicker
+                    onChange={function _a(){}}
+                    onInput={function _a(){}}
+                    onValueStateChange={function _a(){}}
+                    primaryCalendarType="Gregorian"
+                    valueState="None"
+                    placeholder='Von - Bis'
+                />
+                <ToolbarSpacer/>
+                <Text>Zeige abgeschlossene Aufträge:</Text>
+                <Switch checked={true}/>
+            </Toolbar>
 
                 <AnalyticalTable
                     globalFilterValue={searchValue}
@@ -171,16 +214,33 @@ const OrderOverview = () => {
                     ]}
                     data={data}
                     filterable
-
-                    onRowClick={(instance: any) => console.log(instance.detail.row.values)}
-                />
+                
+                onRowClick={(instance: any) => {
+                    console.log(instance.detail.row.values)
+                    if(instance.detail.row.values.status == 1){
+                        setOpen(true)
+                    }
+                }}
+            />
             </div>
             <OrderPopOver
                 open={open}
                 product={"Glucose"}
                 quantity={3}
                 unit={"ml"}
-                onClose={() => setOpen(false)}
+                onClose={async ()=>{
+                    try {
+                        const response = await fetch('http://localhost:4000/finishOrder'); 
+                        console.log(response)
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+
+                    } catch (error) {
+                        console.error('Error fetching data:', error);
+                    }
+                    setOpen(false)
+                }}
             >
             </OrderPopOver>
         </>

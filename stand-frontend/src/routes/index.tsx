@@ -6,21 +6,26 @@ import CreateProductionOrder from "../pages/CreateProductionOrder"
 import ProductionList from "../pages/ProductionList";
 import InfoPageStudies from "../pages/InfoPageStudies";
 import OrderOverview from "../pages/OrderOverview";
+
+import GameStart from "../pages/GameStart";
+
 import SuccessPage from "../pages/SuccessPage";
+
 
 export const router = createBrowserRouter([
     {
         element: <App />,
         errorElement: <ErrorPage />,
         children: [
-            { path: "/", element: <Launchpad /> },
-            { path: "/results", element: <Launchpad /> },
-            { path: "/createPO", element: <CreateProductionOrder /> },
             { path: "*", element: <Launchpad /> },
+            { path: "/", element: <Launchpad /> },
+            { path: "/createPO", element: <CreateProductionOrder /> },
             { path: "/orders", element: <OrderOverview/> },
             { path: "/info", element: <InfoPageStudies/> },
             { path: "/productionList", element: <ProductionList /> },
-            { path: "/SuccessPage", element: <SuccessPage /> }
+            { path: "/gameStart", element: <GameStart /> },
+            { path: "/successPage", element: <SuccessPage /> }
+
         ]
     }
 ]);
