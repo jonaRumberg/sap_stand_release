@@ -55,6 +55,7 @@ const CreateProductionOrder = () => {
     if (product.current.value != "Gummibärchen") {
       toast.current.show();
       setDiasbled(true);
+      
     } else {
       setDiasbled(false);
     }
@@ -201,7 +202,7 @@ const CreateProductionOrder = () => {
           </FormGroup>
         </Form>
 
-        <Form
+        <Form hidden={disabled}
           columnsL={1}
           columnsM={1}
           columnsS={1}
