@@ -5,11 +5,14 @@ import '@ui5/webcomponents-icons/dist/error.js'
 import { AnalyticalTable, Button, DateRangePicker, Icon, Input, Switch, Text, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
 import { useEffect, useState } from 'react';
 import { OrderPopOver } from "../components/OrderPopOver";
+import { HeaderBar } from '../components/HeaderBar';
 import { useLocation } from 'react-router-dom';
+
 
 const OrderOverview = () => {
     const [open, setOpen] = useState(false)
     const [searchValue, setSearchValue] = useState("")
+
 
     const orders = [
                     {
@@ -101,9 +104,11 @@ const OrderOverview = () => {
         console.log("changing data. Order open: ", orderOpen)
         if(orderOpen){
             setData([additionalOrder, ...orders])
+
         } else {
             setData(orders)
         }
+
     },[orderOpen])
 
     // let eventSource: EventSource;
@@ -122,8 +127,13 @@ const OrderOverview = () => {
 
     return (
         <>
+            <HeaderBar title={'Bestellübersicht'}
+                quest={'Lege eine neue Bestellung an'}
+                progressbar={true}
+                progress={50} >
+            </HeaderBar>
             <div
-                style={{padding: "1em"}}
+                style={{ padding: "1em" }}
             >
             <Title style={{paddingBottom: "1em"}}>Einkaufsaufträge</Title>
             <Toolbar>
@@ -147,63 +157,63 @@ const OrderOverview = () => {
                 <Switch checked={true}/>
             </Toolbar>
 
-            <AnalyticalTable
-                globalFilterValue={searchValue}
-                columns={[
-                    {
-                        Header: 'Status',
-                        accessor: 'status',
-                        width: 1,
-                        Cell: (instance: any) => {
-                            let icon;
-                            if(instance.cell.value == 0) {
-                                icon = <Icon name="status-completed" design='Positive'/>
+                <AnalyticalTable
+                    globalFilterValue={searchValue}
+                    columns={[
+                        {
+                            Header: 'Status',
+                            accessor: 'status',
+                            width: 1,
+                            Cell: (instance: any) => {
+                                let icon;
+                                if (instance.cell.value == 0) {
+                                    icon = <Icon name="status-completed" design='Positive' />
+                                }
+                                else if (instance.cell.value == 1) {
+                                    icon = <Icon name="alert" design='Critical' />
+                                }
+                                else {
+                                    icon = <Icon name="error" design='Negative' />
+                                }
+
+                                return icon;
                             }
-                            else if(instance.cell.value == 1) {
-                                icon = <Icon name="alert" design='Critical'/>
-                            }
-                            else {
-                                icon = <Icon name="error" design='Negative'/>
-                            }
 
-                            return icon;
-                        }
-
-                    },
-
-                    {
-                        Header: 'Datum',
-                        accessor: 'date',
-                        sortType: 'datetime',
-                        Cell: (instance: any) => {
-                            const d = new Date(Date.parse(instance.cell.value))
-                            return d.toISOString().slice(0,10)
-                        },
-                        
-                        filter(rows, _columnIds, _filterValue) {
-                            rows.forEach(row => {
-                                
-                                console.log(Date.parse(row.values.date))
-                            })
-
-                            return rows
                         },
 
-                    },
-                    {
-                        Header: 'Typ',
-                        accessor: 'type'
+                        {
+                            Header: 'Datum',
+                            accessor: 'date',
+                            sortType: 'datetime',
+                            Cell: (instance: any) => {
+                                const d = new Date(Date.parse(instance.cell.value))
+                                return d.toISOString().slice(0, 10)
+                            },
 
-                    },
-                    {
-                        Header: 'Menge',
-                        accessor: 'quant',
-                        hAlign: 'End',
+                            filter(rows, _columnIds, _filterValue) {
+                                rows.forEach(row => {
 
-                    },
-                ]}
-                data={data}
-                filterable
+                                    console.log(Date.parse(row.values.date))
+                                })
+
+                                return rows
+                            },
+
+                        },
+                        {
+                            Header: 'Typ',
+                            accessor: 'type'
+
+                        },
+                        {
+                            Header: 'Menge',
+                            accessor: 'quant',
+                            hAlign: 'End',
+
+                        },
+                    ]}
+                    data={data}
+                    filterable
                 
                 onRowClick={(instance: any) => {
                     console.log(instance.detail.row.values)
@@ -214,7 +224,7 @@ const OrderOverview = () => {
             />
             </div>
             <OrderPopOver
-                open = {open}
+                open={open}
                 product={"Glucose"}
                 quantity={3}
                 unit={"ml"}
