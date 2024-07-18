@@ -1,10 +1,7 @@
 import {
   CustomListItem,
-
-  Page,
   Bar,
   Button,
-
   Form,
   FormGroup,
   FormItem,
@@ -14,21 +11,15 @@ import {
   CheckBox,
   Label,
   FlexBox,
-
   List,
   MessageBox,
   DateTimePicker,
-  ComboBoxItem,
-  ComboBox,
-  Icon,
   Toast,
   MessageBoxActions,
   ObjectPage,
   DynamicPageHeader,
   DynamicPageTitle,
-  ObjectPageSection,
-  MessageStrip,
-  ObjectStatus
+
 } from "@ui5/webcomponents-react"
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
@@ -86,12 +77,18 @@ const CreateProductionOrder = () => {
     if (product.current.value != "Gummibärchen") {
       toast.current.show();
       setDiasbled(true);
+      
     } else {
       setDiasbled(false);
     }
   }
+  const error = useRef(null);
+  const errorToast = () => {
+    error.current.show();
+  }
 
-  const productionLineChange = (event) => {
+  const productionLine = useRef(null);
+  const changeProductionLine = () => {
 
   }
 
@@ -146,23 +143,25 @@ const CreateProductionOrder = () => {
     <>
       <ObjectPage
         footer={
-           <Bar design="FloatingFooter"
-           endContent={<>
-              <Button ref={production} 
-              disabled={disabled} 
-              design="Emphasized" 
-              onClick={onButtonClick}>
-              Jetzt produzieren
-              </Button> 
-              <Button design="Transparent">
+          <Bar design="FloatingFooter"
+            endContent={<>
+              <Button ref={production}
+                disabled={disabled}
+                design="Emphasized"
+                onClick={onButtonClick}>
+                Jetzt produzieren
+              </Button>
+              <Button onClick={errorToast} design="Transparent">
                 Später einplanen
               </Button>
-              <Button design="Transparent">
+              <Button onClick={errorToast} design="Transparent">
                 Cancel
               </Button></>}>
-              </Bar>}
+          </Bar>}
         headerContent={<DynamicPageHeader></DynamicPageHeader>}
-        headerTitle={<DynamicPageTitle header="Produktionsauftrag anlegen"></DynamicPageTitle>}
+        headerTitle={
+          <DynamicPageTitle header="Produktionsauftrag anlegen"></DynamicPageTitle>
+        }
         imageShapeCircle
         selectedSectionId="Auftragsdetails"
         style={{
@@ -213,9 +212,6 @@ const CreateProductionOrder = () => {
             <FormItem label="Werk ID">
               <Input type="Number" readonly value="1010" />
             </FormItem>
-            <FormItem label="Linie">
-              <Input type="Number" readonly value="2" />
-            </FormItem>
             <FormItem label="Name">
               <Input type="Text" readonly value="SAP Walldorf" />
             </FormItem>
@@ -228,7 +224,7 @@ const CreateProductionOrder = () => {
           </FormGroup>
         </Form>
 
-        <Form
+        <Form hidden={disabled}
           columnsL={1}
           columnsM={1}
           columnsS={1}
@@ -270,33 +266,40 @@ const CreateProductionOrder = () => {
       </ObjectPage>
       <MessageBox
         open={open}
-
         onClose={handleClose}
         type="Confirm"
+        style={{ minWidth: '600px' }}
       >
-        Produktionszeitpunkt:
-        <DateTimePicker
-          readonly
-          onChange={function _a() { }}
-          onInput={function _a() { }}
-          onValueStateChange={function _a() { }}
-          primaryCalendarType="Gregorian"
-          valueState="None"
-          value="today"
-        />
-        Produktionslinie:
-        <ComboBox
-          icon={<Icon name="production" />}
-          onSelectionChange={productionLineChange}
-          valueState="None"
-          value="Linie 1"
-        >
-          <ComboBoxItem text="Linie 1" />
-          <ComboBoxItem text="Linie 2" />
-          <ComboBoxItem text="Linie 3" />
-        </ComboBox>
+        <Form style={{ minWidth: '500px' }}
+          columnsL={1}
+          columnsM={1}
+          columnsS={1}
+          columnsXL={1}>
+          <FormGroup titleText="Produktion" >
+            <FormItem label="Produktionszeitpunkt:">
+              <DateTimePicker
+                readonly
+                onChange={function _a() { }}
+                onInput={function _a() { }}
+                onValueStateChange={function _a() { }}
+                primaryCalendarType="Gregorian"
+                valueState="None"
+                value="today"
+              />
+            </FormItem>
+            <FormItem label="Produktionslinie:">
+              <Select ref={productionLine} onChange={changeProductionLine} >
+                <Option>Linie 1</Option>
+                <Option>Linie 2</Option>
+                <Option>Linie 3</Option>
+              </Select>
+            </FormItem>
+          </FormGroup>
+        </Form>
+
       </MessageBox>
       <Toast ref={toast}>Tipp: Wähle Gummibärchen aus!</Toast>
+      <Toast ref={error}>Nicht möglich</Toast>
     </>
 
   )

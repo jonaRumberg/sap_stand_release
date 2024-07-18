@@ -1,9 +1,10 @@
 import { Bar, Button, CheckBox, Dialog, FlexBox, Form, FormGroup, FormItem, Input, Label, Select, SelectDialog, SelectDomRef, StandardListItem, Table, TableCell, TableColumn, TableDomRef, TableRow, TextArea, Title } from "@ui5/webcomponents-react"
-import { Children, useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 export const OrderPopOver = ({open, product, quantity, unit, onClose}: {open: boolean, product: string, quantity: int, unit: String, onClose: () => void}) => 
     {
         const dialog = useRef<SelectDomRef>(null);
+        const [smthSelected, setSmthSelected] = useState(false);
 
         const onSend = () => {
             onClose();
@@ -14,6 +15,7 @@ export const OrderPopOver = ({open, product, quantity, unit, onClose}: {open: bo
             <Dialog
                 resizable={true}
                 open={open}
+                onAfterClose={function _evt () {setSmthSelected(false)}}
                 style={{
                     width: "80%",
                     height: "70%"
@@ -24,17 +26,16 @@ export const OrderPopOver = ({open, product, quantity, unit, onClose}: {open: bo
                     <Bar    
                         design="Footer" 
                         endContent={
-                            <Button onClick={onSend} design="Emphasized">
+                            <Button 
+                                disabled = {!smthSelected}
+                                onClick={onSend} 
+                                design="Emphasized">
                                 Bestellen
                             </Button>
                         }
                     />
                 }
                 headerText="Bestellung anlegen"
-                onAfterClose={function _a(){}}
-                onAfterOpen={function _a(){}}
-                onBeforeClose={function _a(){}}
-                onBeforeOpen={function _a(){}}
             >
                 <Form
                     columnsL={2}
@@ -62,6 +63,7 @@ export const OrderPopOver = ({open, product, quantity, unit, onClose}: {open: bo
                         titleText="Mögliche Lieferanten"
                         >
                          <Table
+                            onSelectionChange={function _evt () {setSmthSelected(true);console.log(smthSelected)}}
                             mode="SingleSelect"
                             style={{
                                 width: '250%'
