@@ -5,6 +5,7 @@ import '@ui5/webcomponents-icons/dist/error.js'
 import { AnalyticalTable, Button, DateRangePicker, Icon, Input, Switch, Text, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
 import { useEffect, useState } from 'react';
 import { OrderPopOver } from "../components/OrderPopOver";
+import { useLocation } from 'react-router-dom';
 
 const OrderOverview = () => {
     const [open, setOpen] = useState(false)
@@ -72,8 +73,32 @@ const OrderOverview = () => {
 
     const [orderOpen, setOrderOpen] = useState(false)
     const [data, setData] = useState(orderOpen ? [additionalOrder, ...orders] : orders);
+    const location = useLocation()
+
+    const getOrderPlaced = async () => {
+        
+        try {
+            const response = await fetch('http://localhost:4000/getOrderPlaced'); 
+            console.log(response)
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            const result = await response.text();
+            console.log(result)
+                if(result == 'true'){
+                    setOrderOpen(true)
+                } 
+
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
+    useEffect(() => {
+        getOrderPlaced()
+            }, [location])
     
     useEffect(()=>{
+        console.log("changing data. Order open: ", orderOpen)
         if(orderOpen){
             setData([additionalOrder, ...orders])
         } else {
@@ -81,14 +106,19 @@ const OrderOverview = () => {
         }
     },[orderOpen])
 
-    const eventSource = new EventSource('http://localhost:4000/events');
-    eventSource.onmessage = (event) => {
-       if(JSON.parse(event.data).message == "place order"){
-            setOrderOpen(true)
-       } else {
-           console.log(JSON.parse(event.data))
-       }
-    }
+    // let eventSource: EventSource;
+    // setTimeout(() => {
+    //
+    //     eventSource = new EventSource('http://localhost:4000/events');
+    //     eventSource.onmessage = (event) => {
+    //        if(JSON.parse(event.data).message == "place order"){
+    //             setOrderOpen(true)
+    //        } else {
+    //            console.log(JSON.parse(event.data))
+    //        }
+    //     }
+    //
+    // }, 2000)
 
     return (
         <>
@@ -115,9 +145,6 @@ const OrderOverview = () => {
                 <ToolbarSpacer/>
                 <Text>Zeige abgeschlossene Aufträge:</Text>
                 <Switch checked={true}/>
-                <Button
-                    onClick={()=>setOpen(true)}
-                    >Neu anlegen</Button>
             </Toolbar>
 
             <AnalyticalTable
@@ -178,7 +205,12 @@ const OrderOverview = () => {
                 data={data}
                 filterable
                 
-                onRowClick={(instance: any) => console.log(instance.detail.row.values)}
+                onRowClick={(instance: any) => {
+                    console.log(instance.detail.row.values)
+                    if(instance.detail.row.values.status == 1){
+                        setOpen(true)
+                    }
+                }}
             />
             </div>
             <OrderPopOver
@@ -186,7 +218,19 @@ const OrderOverview = () => {
                 product={"Glucose"}
                 quantity={3}
                 unit={"ml"}
-                onClose={()=>setOpen(false)}
+                onClose={async ()=>{
+                    try {
+                        const response = await fetch('http://localhost:4000/finishOrder'); 
+                        console.log(response)
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+
+                    } catch (error) {
+                        console.error('Error fetching data:', error);
+                    }
+                    setOpen(false)
+                }}
             >
             </OrderPopOver>
         </>

@@ -9,6 +9,7 @@ app.use(express.json()); // Add body parsing middleware
 let clients = [];
 let gameState = 'none' //can be 'none' or 'running'
 let orderPlaced = false
+let orderFinished = false
 
 app.get('/events', (req, res) => {
     res.writeHead(200, {
@@ -81,8 +82,24 @@ app.get('/getOrderPlaced', (req, res) => {
     res.status(200).send(orderPlaced)
 })
 
-app.get('/endGame', (req, res) => {
+app.get('/finishOrder', (req, res) => {
+    if(gameState == 'running multi' && orderPlaced){
+        orderPlaced = false
+        orderFinished = true
+    }
+    res.sendStatus(200);
+})
 
+app.get('/getFinishOrder', (req, res) => {
+    console.log('got order finished: ', orderFinished)
+    res.status(200).send(orderFinished)
+})
+
+app.get('/endGame', (req, res) => {
+    if(gameState == 'running multi'){
+        gameState = 'none'
+    }
+    res.sendStatus(200);
 })
 
 app.listen(PORT, () => {

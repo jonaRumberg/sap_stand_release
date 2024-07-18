@@ -16,7 +16,8 @@ const Launchpad = () => {
         const navigate = useNavigate()
         const [notificationVisible, setNotificationVisible] = useState(false)
 
-        const eventSource = new EventSource('http://localhost:4000/events');
+        let eventSource: EventSource;
+        eventSource = new EventSource('http://localhost:4000/events');
         eventSource.onmessage = (event) => {
             if(JSON.parse(event.data).message == "place order"){
                 setNotificationVisible(true)
@@ -108,6 +109,7 @@ const Launchpad = () => {
                                 title='Einkauf' 
                                 subtitle="Verwalte Einkaufsaufträge" 
                                 callback={() => {
+                                    eventSource.close()
                                     setNotificationVisible(false)
                                     navigate("/orders")
                                 }}
