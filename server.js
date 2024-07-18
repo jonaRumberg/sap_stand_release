@@ -9,6 +9,10 @@ app.set('view engine', 'ejs')
 app.use(express.static('static'));
 app.use(express.urlencoded({ extended: false }))
 
+let gameState = 'none' //can be 'none' or 'running'
+let orderPlaced = false
+let orderFinished = false
+
 const let4 = new Gpio(4, 'out');
 const let17 = new Gpio(17, 'out');
 const let27 = new Gpio(27, 'out');
@@ -32,6 +36,78 @@ const stepSequence = [
         [0,0,0,1],
         [1,0,0,1],
 ];
+
+
+app.get('/startSinglePlayer', (req, res) => {
+    if(gameState == 'none' || gameState == 'running single'){
+        gameState = 'running single'
+        res.sendStatus(200)
+    } else {
+        res.sendStatus(500)
+    }
+
+    console.log(gameState)
+})
+
+app.get('/startTwoPlayer', (req, res) => {
+    if(gameState == 'none'){
+        gameState = 'running multi'
+        res.sendStatus(200)
+    } else {
+        res.sendStatus(500)
+    }
+
+    console.log(gameState)
+})
+
+app.get('/gameStatus', (_req,res) => {
+    if(gameState == 'none'){
+        res.status(200).send('none')
+    } else if (gameState == 'running single'){
+        res.status(200).send('running single')
+    } else if (gameState == 'running multi'){
+        res.status(200).send('running multi')
+    }
+
+    console.log(gameState)
+})
+
+app.get('/placeOrder', (req, res) => {
+    if(gameState == 'running multi'){
+        console.log('Place Order');
+        orderPlaced = true
+
+        clients.forEach(client => {
+            client.write(`data: ${JSON.stringify({"message":"place order"})}\n\n`);
+        });
+        res.sendStatus(200);
+    }
+})
+
+app.get('/getOrderPlaced', (req, res) => {
+    console.log('got order placed: ', orderPlaced)
+    res.status(200).send(orderPlaced)
+})
+
+app.get('/finishOrder', (req, res) => {
+    if(gameState == 'running multi' && orderPlaced){
+        orderPlaced = false
+        orderFinished = true
+    }
+    res.sendStatus(200);
+})
+
+app.get('/getFinishOrder', (req, res) => {
+    console.log('got order finished: ', orderFinished)
+    res.status(200).send(orderFinished)
+})
+
+app.get('/endGame', (req, res) => {
+    if(gameState == 'running multi'){
+        gameState = 'none'
+    }
+    res.sendStatus(200);
+})
 
 
 app.get("/", (_req, res) => {
