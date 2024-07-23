@@ -161,6 +161,10 @@ const CreateProductionOrder = () => {
       <ObjectPage
         footer={
           <Bar design="FloatingFooter"
+            style={{
+                position: "absolute",
+                bottom: "0.5em"
+            }}
             endContent={<>
               <Button ref={production}
                 disabled={disabled}
