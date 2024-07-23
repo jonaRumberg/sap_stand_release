@@ -1,29 +1,32 @@
 const express = require("express");
-const Gpio = require("onoff").Gpio;
+// const Gpio = require("onoff").Gpio;
+const { createServer } = require('http');
+const { Server }  = require("socket.io")
+const cors = require("cors"); // You'll need to install this: npm install cors
 
 const { exec } = require('child_process');
 
 const app = express();
+app.use(cors()); // Enable CORS for all routes
+const server = createServer(app);
+const io = new Server(server);
 
-app.set('view engine', 'ejs')
-app.use(express.static('static'));
-app.use(express.urlencoded({ extended: false }))
 
 let gameState = 'none' //can be 'none' or 'running'
 let orderPlaced = false
 let orderFinished = false
 
-const let4 = new Gpio(4, 'out');
-const let17 = new Gpio(17, 'out');
-const let27 = new Gpio(27, 'out');
-const let22 = new Gpio(22, 'out');
-const let23 = new Gpio(23, 'out');
+// const let4 = new Gpio(4, 'out');
+// const let17 = new Gpio(17, 'out');
+// const let27 = new Gpio(27, 'out');
+// const let22 = new Gpio(22, 'out');
+// const let23 = new Gpio(23, 'out');
 
 const setServoArray = (arr) => {
-        let17.writeSync(arr[0]);
-        let27.writeSync(arr[1]);
-        let22.writeSync(arr[2]);
-        let23.writeSync(arr[3]);
+        // let17.writeSync(arr[0]);
+        // let27.writeSync(arr[1]);
+        // let22.writeSync(arr[2]);
+        // let23.writeSync(arr[3]);
 }
 
 const stepSequence = [
@@ -37,6 +40,15 @@ const stepSequence = [
         [1,0,0,1],
 ];
 
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+
+    // Add Socket.IO event listeners here
+});
 
 app.get('/startSinglePlayer', (req, res) => {
     if(gameState == 'none' || gameState == 'running single'){
@@ -77,9 +89,9 @@ app.get('/placeOrder', (req, res) => {
         console.log('Place Order');
         orderPlaced = true
 
-        clients.forEach(client => {
-            client.write(`data: ${JSON.stringify({"message":"place order"})}\n\n`);
-        });
+        io.emit('orderPlaced', { message: "place order" });
+        res.sendStatus(200);
+
         res.sendStatus(200);
     }
 })
@@ -110,29 +122,17 @@ app.get('/endGame', (req, res) => {
 })
 
 
-app.get("/", (_req, res) => {
-        res.render("index");
-});
-
-app.get("/procurement", (_req, res) => {
-        res.render("procurement");
-});
-
-app.get("/studiengaenge", (_req, res) => {
-        res.render("studiengaenge");
-});
-
-app.get("/on", (_req, res) => {
-        // Code zum Einschalten der LED rpio.write(let4, rpio.HIGH);
-        let4.writeSync(1);
-        res.send("eingeschaltet");
-});
-
-app.get("/off", (_req, res) => {
-        // Code zum Ausschalten der LED
-        let4.writeSync(0);
-        res.send("ausgeschaltet");
-});
+// app.get("/on", (_req, res) => {
+//         // Code zum Einschalten der LED rpio.write(let4, rpio.HIGH);
+//         let4.writeSync(1);
+//         res.send("eingeschaltet");
+// });
+//
+// app.get("/off", (_req, res) => {
+//         // Code zum Ausschalten der LED
+//         let4.writeSync(0);
+//         res.send("ausgeschaltet");
+// });
 
 
 app.get("/enginefwd", (_req, res) => {
@@ -166,7 +166,7 @@ app.get("/pull", (_req, res) => {
         res.status(200).send("Pulling code");
 });
 
-app.listen(3000, () => {
+server.listen(3000, () => {
         console.log("Der Arduino Server ist gestartet auf Port 3000");
 });
 

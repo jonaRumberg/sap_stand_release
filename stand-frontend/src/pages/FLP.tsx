@@ -9,26 +9,45 @@ import { useNavigate } from 'react-router-dom';
 
 import { useEffect, useState } from 'react';
 import { HeaderBar } from '../components/HeaderBar'
+import useSocket from '../utils/Socket';
 
 
 const Launchpad = () => {
         
         const navigate = useNavigate()
         const [notificationVisible, setNotificationVisible] = useState(false)
+        
+        const socket = useSocket();
 
-        let eventSource: EventSource;
-        eventSource = new EventSource('http://localhost:4000/events');
-        eventSource.onmessage = (event) => {
-            if(JSON.parse(event.data).message == "place order"){
-                setNotificationVisible(true)
-            } else {
-                console.log(JSON.parse(event.data).message)
+        useEffect(() => {
+            if (socket) {
+                socket.on('orderPlaced', (data: { message: string }) => {
+                    console.log(data.message);
+                    setNotificationVisible(true)
+                });
             }
-        }
+
+            return () => {
+                console.log(socket)
+                if (socket) {
+                    socket.off('orderPlaced');
+                }
+            };
+        }, [socket]);
+
+        // let eventSource: EventSource;
+        // eventSource = new EventSource(import.meta.env.VITE_SERVER_HOST + '/events');
+        // eventSource.onmessage = (event) => {
+        //     if(JSON.parse(event.data).message == "place order"){
+        //         setNotificationVisible(true)
+        //     } else {
+        //         console.log(JSON.parse(event.data).message)
+        //     }
+        // }
 
         const getOrderPlaced = async () => {
             try {
-                const response = await fetch('http://localhost:4000/getOrderPlaced'); 
+                const response = await fetch(import.meta.env.VITE_SERVER_HOST + '/getOrderPlaced'); 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -48,7 +67,7 @@ const Launchpad = () => {
 
         const startSinglePlayer = async () => {
             try {
-                const response = await fetch('http://localhost:4000/startSinglePlayer');
+                const response = await fetch(import.meta.env.VITE_SERVER_HOST + '/startSinglePlayer');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -61,7 +80,7 @@ const Launchpad = () => {
 
         const startGame = async () => {
              try {
-                const response = await fetch('http://localhost:4000/gameStatus');
+                const response = await fetch(import.meta.env.VITE_SERVER_HOST + '/gameStatus');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -109,7 +128,6 @@ const Launchpad = () => {
                                 title='Einkauf' 
                                 subtitle="Verwalte Einkaufsaufträge" 
                                 callback={() => {
-                                    eventSource.close()
                                     setNotificationVisible(false)
                                     navigate("/orders")
                                 }}

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { OrderPopOver } from "../components/OrderPopOver";
 import { HeaderBar } from '../components/HeaderBar';
 import { useLocation } from 'react-router-dom';
+import useSocket from '../utils/Socket';
 
 
 const OrderOverview = () => {
@@ -78,10 +79,12 @@ const OrderOverview = () => {
     const [data, setData] = useState(orderOpen ? [additionalOrder, ...orders] : orders);
     const location = useLocation()
 
+    const socket = useSocket();
+
     const getOrderPlaced = async () => {
         
         try {
-            const response = await fetch('http://localhost:4000/getOrderPlaced'); 
+            const response = await fetch(import.meta.env.VITE_SERVER_HOST + '/getOrderPlaced'); 
             console.log(response)
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -98,8 +101,24 @@ const OrderOverview = () => {
     }
     useEffect(() => {
         getOrderPlaced()
-            }, [location])
+    }, [location])
     
+    useEffect(() => {
+        if (socket) {
+            socket.on('orderPlaced', (data: { message: string }) => {
+                console.log(data.message);
+                setOrderOpen(true)
+            });
+        }
+
+        return () => {
+            console.log(socket)
+            if (socket) {
+                socket.off('orderPlaced');
+            }
+        };
+    }, [socket]);
+
     useEffect(()=>{
         console.log("changing data. Order open: ", orderOpen)
         if(orderOpen){
@@ -110,20 +129,6 @@ const OrderOverview = () => {
         }
 
     },[orderOpen])
-
-    // let eventSource: EventSource;
-    // setTimeout(() => {
-    //
-    //     eventSource = new EventSource('http://localhost:4000/events');
-    //     eventSource.onmessage = (event) => {
-    //        if(JSON.parse(event.data).message == "place order"){
-    //             setOrderOpen(true)
-    //        } else {
-    //            console.log(JSON.parse(event.data))
-    //        }
-    //     }
-    //
-    // }, 2000)
 
     return (
         <>
@@ -230,7 +235,7 @@ const OrderOverview = () => {
                 unit={"ml"}
                 onClose={async ()=>{
                     try {
-                        const response = await fetch('http://localhost:4000/finishOrder'); 
+                        const response = await fetch(import.meta.env.VITE_SERVER_HOST + '/finishOrder'); 
                         console.log(response)
                             if (!response.ok) {
                                 throw new Error('Network response was not ok');

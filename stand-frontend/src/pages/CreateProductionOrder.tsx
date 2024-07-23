@@ -31,8 +31,6 @@ import { HeaderBar } from "../components/HeaderBar";
 
 import { useNavigate } from "react-router";
 
-
-
 const CreateProductionOrder = () => {
 
   const [availability, _setAvailability] = useState(false);
@@ -59,7 +57,7 @@ const CreateProductionOrder = () => {
     }
     //get oder status
     try {
-        const response = await fetch('http://localhost:4000/getFinishOrder'); 
+        const response = await fetch(import.meta.env.VITE_SERVER_HOST + '/getFinishOrder'); 
         console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -67,7 +65,7 @@ const CreateProductionOrder = () => {
         const result = await response.text();
         console.log(result)
             if(result == 'true'){
-                await fetch('http://localhost:4000/endGame');
+                await fetch(import.meta.env.VITE_SERVER_HOST + '/endGame');
                 setOpen(false)
                 navigate("/successPage")
             } 
@@ -269,7 +267,7 @@ const CreateProductionOrder = () => {
                         <Button
                           disabled={i.buttonDisabled}
                           style={{ flex: "true", justifyContent: "flex-end" }}
-                          onClick={()=>fetch('http://localhost:4000/placeOrder')}
+                          onClick={()=>fetch(import.meta.env.VITE_SERVER_HOST + '/placeOrder')}
                         >
                           Bestellen
                         </Button>

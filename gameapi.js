@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors"); // You'll need to install this: npm install cors
+
 const app = express();
 const PORT = 4000;
 

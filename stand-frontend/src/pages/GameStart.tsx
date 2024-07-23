@@ -7,7 +7,7 @@ const GameStart = () => {
 
     const startSinglePlayer = async () => {
         try {
-            const response = await fetch('http://localhost:4000/startSinglePlayer');
+            const response = await fetch(import.meta.env.VITE_SERVER_HOST + '/startSinglePlayer');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -20,7 +20,7 @@ const GameStart = () => {
 
     const startTwoPlayer = async () => {
         try {
-            const response = await fetch('http://localhost:4000/startTwoPlayer');
+            const response = await fetch(import.meta.env.VITE_SERVER_HOST + '/startTwoPlayer');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
