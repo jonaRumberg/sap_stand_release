@@ -1,4 +1,4 @@
-import { Card, CardHeader, FlexBox, Icon } from "@ui5/webcomponents-react"
+import { Card, CardHeader, Icon } from "@ui5/webcomponents-react"
 
 export const FioriLikeCard = (
     { title, subtitle, icon, callback, showNotify }: {title: string, subtitle: string, icon: string, callback: () => void, showNotify: boolean },

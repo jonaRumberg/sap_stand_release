@@ -19,6 +19,10 @@ import {
   ObjectPage,
   DynamicPageHeader,
   DynamicPageTitle,
+  ToastDomRef,
+  SelectDomRef,
+  ButtonDomRef,
+  HighlightTypes,
 
 } from "@ui5/webcomponents-react"
 import { useRef, useState } from "react";
@@ -31,14 +35,14 @@ import { useNavigate } from "react-router";
 
 const CreateProductionOrder = () => {
 
-  const [availability, setAvailability] = useState(false);
-  let matHighlight = "Error"
+  const [availability, _setAvailability] = useState(false);
+  let matHighlight: HighlightTypes = HighlightTypes.Error
   let matAvailable = "Nicht verfügbar"
-  let matButton = "false"
+  let matButton = false
   if (availability === true) {
-    matHighlight = "Success"
+    matHighlight = HighlightTypes.Success
     matAvailable = "verfügbar"
-    matButton = "true"
+    matButton = true
   }
 
   const [open, setOpen] = useState(false);
@@ -48,7 +52,7 @@ const CreateProductionOrder = () => {
 
   const navigate = useNavigate()
 
-  const handleClose = async (event) => {
+  const handleClose = async (event: any) => {
     if (event.detail.action === MessageBoxActions.OK) {
       // send message to Material ordering
 
@@ -74,21 +78,21 @@ const CreateProductionOrder = () => {
   };
 
   const [disabled, setDiasbled] = useState(false)
-  const toast = useRef(null);
-  const product = useRef(null);
-  const production = useRef(null);
+  const toast = useRef<ToastDomRef>(null);
+  const product = useRef<SelectDomRef>(null);
+  const production = useRef<ButtonDomRef>(null);
   const changeProduct = () => {
-    if (product.current.value != "Gummibärchen") {
-      toast.current.show();
+    if (product.current?.value != "Gummibärchen") {
+      toast.current?.show();
       setDiasbled(true);
 
     } else {
       setDiasbled(false);
     }
   }
-  const error = useRef(null);
+  const error = useRef<ToastDomRef>(null);
   const errorToast = () => {
-    error.current.show();
+    error.current?.show();
   }
 
   const productionLine = useRef(null);
@@ -96,7 +100,13 @@ const CreateProductionOrder = () => {
 
   }
 
-  const materials = [
+  const materials: {
+      materialName: string,
+      available: string,
+      buttonDisabled: boolean,
+      highlight: HighlightTypes,
+      quantity: string,
+  }[] = [
     {
       materialName: "Glukosesirup",
       available: matAvailable,
@@ -107,36 +117,36 @@ const CreateProductionOrder = () => {
     {
       materialName: "Farbe Rot",
       available: "Verfügbar",
-      buttonDisabled: "true",
-      highlight: "Success",
+      buttonDisabled: true,
+      highlight: HighlightTypes.Success,
       quantity: "10ml",
     },
     {
       materialName: "Farbe Gelb",
       available: "Verfügbar",
-      buttonDisabled: "true",
-      highlight: "Success",
+      buttonDisabled: true,
+      highlight: HighlightTypes.Success,
       quantity: "10ml",
     },
     {
       materialName: "Farbe Grün",
       available: "Verfügbar",
-      buttonDisabled: "true",
-      highlight: "Success",
+      buttonDisabled: true,
+      highlight: HighlightTypes.Success,
       quantity: "10ml",
     },
     {
       materialName: "Farbe Blau",
       available: "Verfügbar",
-      buttonDisabled: "true",
-      highlight: "Success",
+      buttonDisabled: true,
+      highlight: HighlightTypes.Success,
       quantity: "10ml",
     },
     {
       materialName: "Plastiktüten",
       available: "Verfügbar",
-      buttonDisabled: "true",
-      highlight: "Success",
+      buttonDisabled: true,
+      highlight: HighlightTypes.Success,
       quantity: "2stk",
     },
   ]
