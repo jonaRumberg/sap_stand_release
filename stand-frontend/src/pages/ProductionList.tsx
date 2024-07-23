@@ -1,10 +1,18 @@
-import { List, Page, Button, Bar, Toast, ToastDomRef, Title, CustomListItem, Icon, FlexBox, Input } from "@ui5/webcomponents-react";
+import { List, Page, Button, Bar, Toast, ToastDomRef, Title, CustomListItem, Icon, FlexBox, Input, IconDesign } from "@ui5/webcomponents-react";
 import { useRef, useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { HeaderBar } from "../components/HeaderBar";
 
 const ProductionList = () => {
-    const productionOrders = [
+    const productionOrders: {
+            product: string,
+            color: string,
+            quantity: number,
+            plant: string,
+            lane: number,
+            icon_name: string,
+            icon_design: IconDesign
+    }[] = [
         {
             product: "Gummibärchen",
             color: "gemischt",
@@ -12,7 +20,7 @@ const ProductionList = () => {
             plant: "SAP Walldorf",
             lane: 2,
             icon_name: "alert",
-            icon_design: "Critical"
+            icon_design: IconDesign.Critical
         },
         {
             product: "Post-Its",
@@ -21,7 +29,7 @@ const ProductionList = () => {
             plant: "SAP Markdorf",
             lane: 1,
             icon_name: "sys-enter-2",
-            icon_design: "Positive"
+            icon_design: IconDesign.Positive
         },
         {
             product: "Post-Its",
@@ -30,7 +38,7 @@ const ProductionList = () => {
             plant: "SAP Dresden",
             lane: 3,
             icon_name: "error",
-            icon_design: "Negative"
+            icon_design: IconDesign.Negative
         },
         {
             product: "Kugelschreiber",
@@ -39,7 +47,7 @@ const ProductionList = () => {
             plant: "SAP Berlin",
             lane: 2,
             icon_name: "sys-enter-2",
-            icon_design: "Positive"
+            icon_design: IconDesign.Positive
         },
         {
             product: "Textmarker",
@@ -48,7 +56,7 @@ const ProductionList = () => {
             plant: "SAP München",
             lane: 3,
             icon_name: "sys-enter-2",
-            icon_design: "Positive"
+            icon_design: IconDesign.Positive
         },
         {
             product: "Tasse",
@@ -57,7 +65,7 @@ const ProductionList = () => {
             plant: "SAP Walldorf",
             lane: 1,
             icon_name: "sys-enter-2",
-            icon_design: "Positive"
+            icon_design: IconDesign.Positive
         },
         {
             product: "Postkarte",
@@ -66,7 +74,7 @@ const ProductionList = () => {
             plant: "SAP Markdorf",
             lane: 2,
             icon_name: "error",
-            icon_design: "Negative"
+            icon_design: IconDesign.Negative
         },
         {
             product: "Bleistift",
@@ -75,7 +83,7 @@ const ProductionList = () => {
             plant: "SAP Dresden",
             lane: 3,
             icon_name: "alert",
-            icon_design: "Critical"
+            icon_design: IconDesign.Critical
         },
         {
             product: "Kugelschreiber",
@@ -84,7 +92,7 @@ const ProductionList = () => {
             plant: "SAP Berlin",
             lane: 1,
             icon_name: "alert",
-            icon_design: "Critical"
+            icon_design: IconDesign.Critical
         },
         {
             product: "Gummibärchen",
@@ -93,7 +101,7 @@ const ProductionList = () => {
             plant: "SAP München",
             lane: 2,
             icon_name: "alert",
-            icon_design: "Critical"
+            icon_design: IconDesign.Critical
         }
     ];
 
@@ -105,9 +113,9 @@ const ProductionList = () => {
         toast.current?.show();
     };
 
-    const handleChange = (event) => {
+    const handleChange = (event: any) => {
         const query = event.target.value.toLowerCase();
-        const tempOrders = [];
+        const tempOrders:any[] = [];
 
         productionOrders.forEach(object => {
             const valueString = getObjectValues(object).join().toLowerCase();
@@ -119,8 +127,8 @@ const ProductionList = () => {
         setFilteredProductionOrders(tempOrders);
     };
 
-    function getObjectValues(obj) {
-        let values = [];
+    function getObjectValues(obj: any) {
+        let values:any[] = [];
         for (let key in obj) {
             if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
                 values = values.concat(getObjectValues(obj[key]));
