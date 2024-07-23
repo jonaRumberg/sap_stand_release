@@ -2,7 +2,7 @@ import '@ui5/webcomponents-icons/dist/status-completed.js'
 import '@ui5/webcomponents-icons/dist/alert.js'
 import '@ui5/webcomponents-icons/dist/error.js'
 
-import { AnalyticalTable, Button, DateRangePicker, Icon, Input, Switch, Text, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
+import { AnalyticalTable, DateRangePicker, Icon, Input, Switch, Text, TextAlign, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
 import { useEffect, useState } from 'react';
 import { OrderPopOver } from "../components/OrderPopOver";
 import { HeaderBar } from '../components/HeaderBar';
@@ -208,7 +208,7 @@ const OrderOverview = () => {
                         {
                             Header: 'Menge',
                             accessor: 'quant',
-                            hAlign: 'End',
+                            hAlign: TextAlign.End,
 
                         },
                     ]}
