@@ -1,9 +1,8 @@
-import { Bar, Button, CheckBox, Dialog, FlexBox, Form, FormGroup, FormItem, Input, Label, Select, SelectDialog, SelectDomRef, StandardListItem, Table, TableCell, TableColumn, TableDomRef, TableRow, TextArea, Title } from "@ui5/webcomponents-react"
-import { useRef, useState } from "react"
+import { Bar, Button, Dialog, Form, FormGroup, FormItem, Input, Table, TableCell, TableColumn, TableRow } from "@ui5/webcomponents-react"
+import { useState } from "react"
 
 export const OrderPopOver = ({open, product, quantity, unit, onClose}: {open: boolean, product: string, quantity: int, unit: String, onClose: () => void}) => 
     {
-        const dialog = useRef<SelectDomRef>(null);
         const [smthSelected, setSmthSelected] = useState(false);
 
         const onSend = () => {
